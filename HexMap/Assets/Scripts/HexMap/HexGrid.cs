@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class HexGrid : MonoBehaviour {
 
@@ -12,6 +13,11 @@ public class HexGrid : MonoBehaviour {
 
 	[SerializeField]
 	HexCell _cellPrefab;
+
+	[SerializeField]
+	Text _cellLabelPrefab;
+
+	Canvas _gridCanvas;
 
 	public int Width {
 		get { return _width; }
@@ -28,6 +34,8 @@ public class HexGrid : MonoBehaviour {
 	#region Unity_Methods
 
 	void Awake() {
+		_gridCanvas = GetComponentInChildren<Canvas>();
+
 		_cells = new HexCell[_height * _width];
 
 		for (int z = 0, i = 0; z < _height; ++z) {
@@ -50,6 +58,12 @@ public class HexGrid : MonoBehaviour {
 		HexCell Cell = _cells[p_i] = Instantiate<HexCell> (_cellPrefab);
 		Cell.transform.SetParent (transform, false);
 		Cell.transform.localPosition = position;
+
+		//Display
+		Text label = Instantiate<Text>(_cellLabelPrefab);
+		label.rectTransform.SetParent (_gridCanvas.transform, false);
+		label.rectTransform.anchoredPosition = new Vector2 (position.x, position.z);
+		label.text = p_x.ToString () + "\n" + p_z.ToString ();
 
 	}
 
