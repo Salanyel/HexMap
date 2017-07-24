@@ -18,6 +18,7 @@ public class HexGrid : MonoBehaviour {
 	Text _cellLabelPrefab;
 
 	Canvas _gridCanvas;
+	HexMesh _hexMesh;
 
 	public int Width {
 		get { return _width; }
@@ -35,6 +36,7 @@ public class HexGrid : MonoBehaviour {
 
 	void Awake() {
 		_gridCanvas = GetComponentInChildren<Canvas>();
+		_hexMesh = GetComponentInChildren<HexMesh> ();
 
 		_cells = new HexCell[_height * _width];
 
@@ -45,15 +47,19 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 
+	void Start() {
+		_hexMesh.Triangulate (_cells);
+	}
+
 	#endregion
 
 	#region Methods
 
 	void CreateCell(int p_x, int p_z, int p_i) {
 		Vector3 position;
-		position.x = p_x * 10f;
+		position.x = (p_x + p_z * 0.5f - p_z / 2) * (HexMetrics._innerRadius * 2f);
 		position.y = 0f;
-		position.z = p_z * 10f;
+		position.z = p_z * (HexMetrics._outerRadius * 1.5f);
 
 		HexCell Cell = _cells[p_i] = Instantiate<HexCell> (_cellPrefab);
 		Cell.transform.SetParent (transform, false);
