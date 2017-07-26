@@ -6,7 +6,21 @@ public class HexCell : MonoBehaviour {
 
 	#region Variables
 
-	public HexCoordinates _coordinates;
+	[SerializeField]
+	HexCoordinates _coordinates;
+
+	[SerializeField]
+	Color _color;
+
+	public HexCoordinates Coordinates {
+		get { return _coordinates; }
+		set { _coordinates = value; }
+	}
+
+	public Color Color {
+		get { return _color; }
+		set { _color = value; }
+	}
 
 	#endregion
 }
