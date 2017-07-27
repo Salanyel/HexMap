@@ -20,9 +20,6 @@ public class HexGrid : MonoBehaviour {
 	[SerializeField]
 	Color _defaultColor = Color.white;
 
-	[SerializeField]
-	Color _touchedColor = Color.magenta;
-
 	Canvas _gridCanvas;
 	HexMesh _hexMesh;
 
@@ -57,33 +54,16 @@ public class HexGrid : MonoBehaviour {
 		_hexMesh.Triangulate (_cells);
 	}
 
-	void Update() {
-		if (Input.GetMouseButton (0)) {
-			HandleInput ();
-		}
-	}
-
 	#endregion
 
 	#region Methods
 
-	void HandleInput() {
-		Ray inputRay = Camera.main.ScreenPointToRay (Input.mousePosition);
-		RaycastHit hit;
-		if (Physics.Raycast (inputRay, out hit)) {
-			TouchCell (hit.point);
-			Debug.Log ("Touch");
-		} else {
-			Debug.Log ("No touch");
-		}
-	}
-
-	void TouchCell(Vector3 p_position) {
+	public void ColorCell (Vector3 p_position, Color p_color) {
 		p_position = transform.InverseTransformPoint (p_position);
 		HexCoordinates coordinates = HexCoordinates.FromPosition (p_position);
 		int index = coordinates.X + coordinates.Z * Width + coordinates.Z / 2;
 		HexCell cell = _cells [index];
-		cell.Color = _touchedColor;
+		cell.Color = p_color;
 		Debug.Log ("Coloring cell " + coordinates.ToString ());
 		_hexMesh.Triangulate (_cells);
 
