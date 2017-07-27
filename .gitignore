@@ -1,2 +1,5 @@
 /HexMap/Library
 /HexMap/Temp
+/HexMap/Assembly-CSharp.csproj
+/HexMap/HexMap.sln
+HexMap/Assembly-CSharp-Editor.csproj
