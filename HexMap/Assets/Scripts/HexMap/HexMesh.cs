@@ -64,8 +64,9 @@ public class HexMesh : MonoBehaviour {
 		AddTriangle (center, v1, v2);
 		AddTriangleColor (p_cell.Color);
 
-		Vector3 v3 = center + HexMetrics.GetFirstCorner(p_direction);
-		Vector3 v4 = center + HexMetrics.GetSecondCorner(p_direction);
+		Vector3 bridge = HexMetrics.GetBridge (p_direction);
+		Vector3 v3 = v1 + bridge;
+		Vector3 v4 = v2 + bridge;
 
 		AddQuad (v1, v2, v3, v4);
 
@@ -73,10 +74,22 @@ public class HexMesh : MonoBehaviour {
 		HexCell neighbor = p_cell.GetNeighbor (p_direction) ?? p_cell;
 		HexCell nextNeighbor = p_cell.GetNeighbor (p_direction.Next ()) ?? p_cell;
 
-		AddQuadColor (
-			p_cell.Color, 
-			p_cell.Color, 
+		//The bridge is the square that directly link 2 hexes
+		Color bridgeColor = (p_cell.Color + neighbor.Color) * 0.5f;
+		AddQuadColor (p_cell.Color, bridgeColor);
+
+		//Add two triangles to merge the color in the left triangular zone between 2 hexes and that reaches the others
+		AddTriangle (v1, center + HexMetrics.GetFirstCorner (p_direction), v3);
+		AddTriangleColor (
+			p_cell.Color,
 			(p_cell.Color + prevNeighbor.Color + neighbor.Color) / 3f,
+			bridgeColor
+		);
+
+		AddTriangle(v2, v4, center + HexMetrics.GetSecondCorner(p_direction));
+		AddTriangleColor(
+			p_cell.Color,
+			bridgeColor,
 			(p_cell.Color + neighbor.Color + nextNeighbor.Color) / 3f
 		);
 	}
@@ -122,6 +135,13 @@ public class HexMesh : MonoBehaviour {
 		_colors.Add(p_c2);
 		_colors.Add(p_c3);
 		_colors.Add(p_c4);
+	}
+
+	void AddQuadColor(Color p_c1, Color p_c2) {
+		_colors.Add (p_c1);
+		_colors.Add (p_c1);
+		_colors.Add (p_c2);
+		_colors.Add (p_c2);
 	}
 
 	#endregion
