@@ -51,23 +51,40 @@ public class HexMesh : MonoBehaviour {
 	}
 
 	void Triangulate(HexCell p_cell) {
-		Vector3 center = p_cell.transform.localPosition;
-		for (int i = 0; i < 6; ++i) {
-			AddTriangle (
-				center,
-				center + HexMetrics._corners [i],
-				center + HexMetrics._corners [i+1]
-			);
-
-			AddTriangleColor(p_cell.Color);
-
+		for (ENUM_HexDirection d = ENUM_HexDirection.NE; d <= ENUM_HexDirection.NW; d++) {
+			Triangulate (d, p_cell);
 		}
+	}
+
+	void Triangulate(ENUM_HexDirection p_direction, HexCell p_cell) {
+		Vector3 center = p_cell.transform.localPosition;
+
+		AddTriangle (
+			center,
+			center + HexMetrics.GetFirstCorner(p_direction),
+			center + HexMetrics.GetSecondCorner(p_direction)
+		);
+
+		HexCell prevNeighbor = p_cell.GetNeighbor (p_direction.Previous ()) ?? p_cell;
+		HexCell neighbor = p_cell.GetNeighbor (p_direction) ?? p_cell;
+		HexCell nextNeighbor = p_cell.GetNeighbor (p_direction.Next ()) ?? p_cell;
+
+		Color edgeColor = (p_cell.Color + neighbor.Color) * 0.5f;
+		AddTriangleColor (p_cell.Color, 
+			(p_cell.Color + prevNeighbor.Color + neighbor.Color) / 3f,
+			(p_cell.Color + neighbor.Color + nextNeighbor.Color) / 3f);
 	}
 
 	void AddTriangleColor(Color p_color) {
 		_colors.Add (p_color);
 		_colors.Add (p_color);
 		_colors.Add (p_color);
+	}
+
+	void AddTriangleColor(Color p_c1, Color p_c2, Color p_c3) {
+		_colors.Add (p_c1);
+		_colors.Add (p_c2);
+		_colors.Add (p_c3);
 	}
 
 	void AddTriangle(Vector3 p_v1, Vector3 p_v2, Vector3 p_v3) {
