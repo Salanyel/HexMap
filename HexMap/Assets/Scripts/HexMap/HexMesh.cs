@@ -64,34 +64,32 @@ public class HexMesh : MonoBehaviour {
 		AddTriangle (center, v1, v2);
 		AddTriangleColor (p_cell.Color);
 
+		if (p_direction <= ENUM_HexDirection.SE) {
+			TriangulateConnection (p_direction, p_cell, v1, v2);
+		}
+	}
+
+	void TriangulateConnection(ENUM_HexDirection p_direction, HexCell p_cell, Vector3 p_v1, Vector3 p_v2) {
+		HexCell neighbor = p_cell.GetNeighbor(p_direction);
+
+		if (neighbor == null) {
+			return;
+		}
+
 		Vector3 bridge = HexMetrics.GetBridge (p_direction);
-		Vector3 v3 = v1 + bridge;
-		Vector3 v4 = v2 + bridge;
+		Vector3 v3 = p_v1 + bridge;
+		Vector3 v4 = p_v2 + bridge;
 
-		AddQuad (v1, v2, v3, v4);
+		AddQuad (p_v1, p_v2, v3, v4);
 
-		HexCell prevNeighbor = p_cell.GetNeighbor (p_direction.Previous ()) ?? p_cell;
-		HexCell neighbor = p_cell.GetNeighbor (p_direction) ?? p_cell;
-		HexCell nextNeighbor = p_cell.GetNeighbor (p_direction.Next ()) ?? p_cell;
+		AddQuadColor (p_cell.Color, neighbor.Color);
 
-		//The bridge is the square that directly link 2 hexes
-		Color bridgeColor = (p_cell.Color + neighbor.Color) * 0.5f;
-		AddQuadColor (p_cell.Color, bridgeColor);
+		HexCell nextNeighbor = p_cell.GetNeighbor(p_direction.Next());
 
-		//Add two triangles to merge the color in the left triangular zone between 2 hexes and that reaches the others
-		AddTriangle (v1, center + HexMetrics.GetFirstCorner (p_direction), v3);
-		AddTriangleColor (
-			p_cell.Color,
-			(p_cell.Color + prevNeighbor.Color + neighbor.Color) / 3f,
-			bridgeColor
-		);
-
-		AddTriangle(v2, v4, center + HexMetrics.GetSecondCorner(p_direction));
-		AddTriangleColor(
-			p_cell.Color,
-			bridgeColor,
-			(p_cell.Color + neighbor.Color + nextNeighbor.Color) / 3f
-		);
+		if (p_direction <= ENUM_HexDirection.E && nextNeighbor != null) {
+			AddTriangle(p_v2, v4, p_v2 + HexMetrics.GetBridge(p_direction.Next()));
+			AddTriangleColor(p_cell.Color, neighbor.Color, nextNeighbor.Color);
+		}
 	}
 
 	void AddTriangleColor(Color p_color) {

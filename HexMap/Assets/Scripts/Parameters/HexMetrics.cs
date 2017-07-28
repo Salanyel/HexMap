@@ -36,6 +36,6 @@ public static class HexMetrics {
 	}
 
 	public static Vector3 GetBridge(ENUM_HexDirection p_direction) {
-		return (_corners[(int)p_direction] + _corners[(int) p_direction + 1]) * 0.5f * _blendFactor;
+		return (_corners[(int)p_direction] + _corners[(int) p_direction + 1]) * _blendFactor;
 	}
 }
