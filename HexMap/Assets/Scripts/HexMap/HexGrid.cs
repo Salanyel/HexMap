@@ -83,6 +83,27 @@ public class HexGrid : MonoBehaviour {
 		cell.Coordinates = HexCoordinates.FromOffsetCoordinates (p_x, p_z);
 		cell.Color = _defaultColor;
 
+		//Save neighbors
+		if (p_x > 0) {
+			cell.SetNeighbor(ENUM_HexDirection.W, _cells[p_i - 1]);
+		}
+
+		if (p_z > 0) {
+			if ((p_z & 1) == 0) {
+				cell.SetNeighbor (ENUM_HexDirection.SE, _cells [p_i - _width]);
+
+				if (p_x > 0) {
+					cell.SetNeighbor (ENUM_HexDirection.SW, _cells [p_i - _width - 1]);
+				}
+			} else {
+				cell.SetNeighbor (ENUM_HexDirection.SW, _cells [p_i - _width]);
+
+				if (p_x < _width - 1) {
+					cell.SetNeighbor (ENUM_HexDirection.SE, _cells [p_i - _width + 1]);
+				}
+			}
+		}
+
 		//Display
 		Text label = Instantiate<Text>(_cellLabelPrefab);
 		label.rectTransform.SetParent (_gridCanvas.transform, false);
