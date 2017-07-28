@@ -58,21 +58,27 @@ public class HexMesh : MonoBehaviour {
 
 	void Triangulate(ENUM_HexDirection p_direction, HexCell p_cell) {
 		Vector3 center = p_cell.transform.localPosition;
+		Vector3 v1 = center + HexMetrics.GetFirstSolidCorner(p_direction);
+		Vector3 v2 = center + HexMetrics.GetSecondSolidCorner(p_direction);
 
-		AddTriangle (
-			center,
-			center + HexMetrics.GetFirstCorner(p_direction),
-			center + HexMetrics.GetSecondCorner(p_direction)
-		);
+		AddTriangle (center, v1, v2);
+		AddTriangleColor (p_cell.Color);
+
+		Vector3 v3 = center + HexMetrics.GetFirstCorner(p_direction);
+		Vector3 v4 = center + HexMetrics.GetSecondCorner(p_direction);
+
+		AddQuad (v1, v2, v3, v4);
 
 		HexCell prevNeighbor = p_cell.GetNeighbor (p_direction.Previous ()) ?? p_cell;
 		HexCell neighbor = p_cell.GetNeighbor (p_direction) ?? p_cell;
 		HexCell nextNeighbor = p_cell.GetNeighbor (p_direction.Next ()) ?? p_cell;
 
-		Color edgeColor = (p_cell.Color + neighbor.Color) * 0.5f;
-		AddTriangleColor (p_cell.Color, 
+		AddQuadColor (
+			p_cell.Color, 
+			p_cell.Color, 
 			(p_cell.Color + prevNeighbor.Color + neighbor.Color) / 3f,
-			(p_cell.Color + neighbor.Color + nextNeighbor.Color) / 3f);
+			(p_cell.Color + neighbor.Color + nextNeighbor.Color) / 3f
+		);
 	}
 
 	void AddTriangleColor(Color p_color) {
@@ -95,6 +101,27 @@ public class HexMesh : MonoBehaviour {
 		_triangles.Add (vertexIndex);
 		_triangles.Add (vertexIndex + 1);
 		_triangles.Add (vertexIndex + 2);
+	}
+
+	void AddQuad (Vector3 p_v1, Vector3 p_v2, Vector3 p_v3, Vector3 p_v4) {
+		int vertexIndex = _vertices.Count;
+		_vertices.Add(p_v1);
+		_vertices.Add(p_v2);
+		_vertices.Add(p_v3);
+		_vertices.Add(p_v4);
+		_triangles.Add(vertexIndex);
+		_triangles.Add(vertexIndex + 2);
+		_triangles.Add(vertexIndex + 1);
+		_triangles.Add(vertexIndex + 1);
+		_triangles.Add(vertexIndex + 2);
+		_triangles.Add(vertexIndex + 3);
+	}
+
+	void AddQuadColor (Color p_c1, Color p_c2, Color p_c3, Color p_c4) {
+		_colors.Add(p_c1);
+		_colors.Add(p_c2);
+		_colors.Add(p_c3);
+		_colors.Add(p_c4);
 	}
 
 	#endregion
