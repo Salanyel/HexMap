@@ -79,6 +79,7 @@ public class HexMesh : MonoBehaviour {
 		Vector3 bridge = HexMetrics.GetBridge (p_direction);
 		Vector3 v3 = p_v1 + bridge;
 		Vector3 v4 = p_v2 + bridge;
+		v3.y = v4.y = neighbor.Elevation * HexMetrics._elevationStep;
 
 		AddQuad (p_v1, p_v2, v3, v4);
 
@@ -87,7 +88,9 @@ public class HexMesh : MonoBehaviour {
 		HexCell nextNeighbor = p_cell.GetNeighbor(p_direction.Next());
 
 		if (p_direction <= ENUM_HexDirection.E && nextNeighbor != null) {
-			AddTriangle(p_v2, v4, p_v2 + HexMetrics.GetBridge(p_direction.Next()));
+			Vector3 v5 = p_v2 + HexMetrics.GetBridge (p_direction.Next ());
+			v5.y = nextNeighbor.Elevation * HexMetrics._elevationStep;
+			AddTriangle(p_v2, v4, v5);
 			AddTriangleColor(p_cell.Color, neighbor.Color, nextNeighbor.Color);
 		}
 	}
