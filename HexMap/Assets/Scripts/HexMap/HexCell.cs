@@ -12,6 +12,12 @@ public class HexCell : MonoBehaviour {
 	[SerializeField]
 	Color _color;
 
+	[SerializeField]
+	int _elevation;
+
+	[SerializeField]
+	RectTransform _uiRect;
+
 	public HexCoordinates Coordinates {
 		get { return _coordinates; }
 		set { _coordinates = value; }
@@ -20,6 +26,24 @@ public class HexCell : MonoBehaviour {
 	public Color Color {
 		get { return _color; }
 		set { _color = value; }
+	}
+
+	public int Elevation {
+		get { return _elevation; }
+		set { 
+			_elevation = value;
+			Vector3 position = transform.localPosition;
+			position.y = value * HexMetrics._elevationStep;
+			transform.localPosition = position;
+
+			Vector3 uiPosition = _uiRect.localPosition;
+			uiPosition.z = _elevation * -HexMetrics._elevationStep;
+			_uiRect.localPosition = uiPosition;
+		}
+	}
+
+	public RectTransform UIRect {
+		set { _uiRect = value; }
 	}
 
 	#endregion

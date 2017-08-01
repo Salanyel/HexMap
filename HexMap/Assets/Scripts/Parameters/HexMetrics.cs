@@ -5,6 +5,7 @@ using UnityEngine;
 public static class HexMetrics {
 	public const float _outerRadius = 10f;
 	public const float _innerRadius = _outerRadius * 0.866025404f;
+	public const float _elevationStep = 5f;
 
 	public static Vector3[] _corners = {
 		new Vector3 (0f, 0f, _outerRadius),
