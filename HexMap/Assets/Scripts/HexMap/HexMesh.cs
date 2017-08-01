@@ -69,6 +69,34 @@ public class HexMesh : MonoBehaviour {
 		}
 	}
 
+	void TriangulateEdgeTerraces(
+		Vector3 p_beginLeft, Vector3 p_beginRight, HexCell p_beginCell,
+		Vector3 p_endLeft, Vector3 p_endRight, HexCell p_endCell) 
+	{
+		Vector3 v3 = HexMetrics.TerraceLerp (p_beginLeft, p_endLeft, 1);
+		Vector3 v4 = HexMetrics.TerraceLerp (p_beginRight, p_endRight, 1);
+		Color c2 = HexMetrics.TerraceLerp (p_beginCell.Color, p_endCell.Color, 1);
+
+		AddQuad (p_beginLeft, p_beginRight, v3, v4);
+		AddQuadColor (p_beginCell.Color, c2);
+
+		for (int i = 2; i < HexMetrics._terraceSteps; i++) {
+			Vector3 v1 = v3;
+			Vector3 v2 = v4;
+			Color c1 = c2;
+
+			v3 = HexMetrics.TerraceLerp (p_beginLeft, p_endLeft, i);
+			v4 = HexMetrics.TerraceLerp (p_beginRight, p_endRight, i);
+			c2 = HexMetrics.TerraceLerp (p_beginCell.Color, p_endCell.Color, i);
+
+			AddQuad (v1, v2, v3, v4);
+			AddQuadColor (c1, c2);
+		}
+
+		AddQuad (v3, v4, p_endLeft, p_endRight);
+		AddQuadColor (c2, p_endCell.Color);
+	}
+
 	void TriangulateConnection(ENUM_HexDirection p_direction, HexCell p_cell, Vector3 p_v1, Vector3 p_v2) {
 		HexCell neighbor = p_cell.GetNeighbor(p_direction);
 
@@ -81,9 +109,9 @@ public class HexMesh : MonoBehaviour {
 		Vector3 v4 = p_v2 + bridge;
 		v3.y = v4.y = neighbor.Elevation * HexMetrics._elevationStep;
 
-		AddQuad (p_v1, p_v2, v3, v4);
-
-		AddQuadColor (p_cell.Color, neighbor.Color);
+		TriangulateEdgeTerraces (p_v1, p_v2, p_cell, v3, v4, neighbor);
+		//AddQuad (p_v1, p_v2, v3, v4);
+		//AddQuadColor (p_cell.Color, neighbor.Color);
 
 		HexCell nextNeighbor = p_cell.GetNeighbor(p_direction.Next());
 
