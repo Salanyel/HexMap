@@ -62,5 +62,9 @@ public class HexCell : MonoBehaviour {
 		p_cell._neighbors [(int)p_direction.Opposite ()] = this;
 	}
 
+	public ENUM_HexEdgeType GetEdgeType(ENUM_HexDirection p_direction) {
+		return HexMetrics.GetEdgeType(_elevation, _neighbors[(int) p_direction].Elevation);
+	}
+
 	#endregion
 }

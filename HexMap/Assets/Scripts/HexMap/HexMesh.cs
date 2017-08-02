@@ -109,9 +109,12 @@ public class HexMesh : MonoBehaviour {
 		Vector3 v4 = p_v2 + bridge;
 		v3.y = v4.y = neighbor.Elevation * HexMetrics._elevationStep;
 
-		TriangulateEdgeTerraces (p_v1, p_v2, p_cell, v3, v4, neighbor);
-		//AddQuad (p_v1, p_v2, v3, v4);
-		//AddQuadColor (p_cell.Color, neighbor.Color);
+		if (p_cell.GetEdgeType (p_direction) == ENUM_HexEdgeType.Slope) {
+			TriangulateEdgeTerraces (p_v1, p_v2, p_cell, v3, v4, neighbor);
+		} else {
+			AddQuad(p_v1, p_v2, v3, v4);
+			AddQuadColor(p_cell.Color, neighbor.Color);
+		}
 
 		HexCell nextNeighbor = p_cell.GetNeighbor(p_direction.Next());
 
