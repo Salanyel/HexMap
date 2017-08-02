@@ -153,6 +153,21 @@ public class HexMesh : MonoBehaviour {
 					p_bottom, p_bottomCell, p_left, p_leftCell, p_right, p_rightCell);
 				return;
 			}
+			if (rightEdgeType == ENUM_HexEdgeType.Flat) {
+				TriangulateCornerTerraces(
+					p_left, p_leftCell, p_right, p_rightCell, p_bottom, p_bottomCell
+				);
+				return;
+			}
+		}
+
+		if (rightEdgeType == ENUM_HexEdgeType.Slope) {
+			if (leftEdgeType == ENUM_HexEdgeType.Flat) {
+				TriangulateCornerTerraces(
+					p_right, p_rightCell, p_bottom, p_bottomCell, p_left, p_leftCell
+				);
+				return;
+			}
 		}
 
 		AddTriangle (p_bottom, p_left, p_right);
