@@ -66,5 +66,9 @@ public class HexCell : MonoBehaviour {
 		return HexMetrics.GetEdgeType(_elevation, _neighbors[(int) p_direction].Elevation);
 	}
 
+	public ENUM_HexEdgeType GetEdgeType(HexCell p_cell) {
+		return HexMetrics.GetEdgeType (_elevation, p_cell.Elevation);
+	}
+
 	#endregion
 }

@@ -121,8 +121,69 @@ public class HexMesh : MonoBehaviour {
 		if (p_direction <= ENUM_HexDirection.E && nextNeighbor != null) {
 			Vector3 v5 = p_v2 + HexMetrics.GetBridge (p_direction.Next ());
 			v5.y = nextNeighbor.Elevation * HexMetrics._elevationStep;
+
+			if (p_cell.Elevation <= neighbor.Elevation) {
+				if (p_cell.Elevation <= nextNeighbor.Elevation) {
+					TriangulateCorner (p_v2, p_cell, v4, neighbor, v5, nextNeighbor);
+				} else {
+					TriangulateCorner (v5, nextNeighbor, p_v2, p_cell, v4, neighbor);
+				} 
+			}else if (neighbor.Elevation <= nextNeighbor.Elevation) {
+				TriangulateCorner (v4, neighbor, v5, nextNeighbor, p_v2, p_cell);
+			} else {
+				TriangulateCorner (v5, nextNeighbor, p_v2, p_cell, v4, neighbor);
+			}
+
 			AddTriangle(p_v2, v4, v5);
 			AddTriangleColor(p_cell.Color, neighbor.Color, nextNeighbor.Color);
+		}
+	}
+
+	void TriangulateCorner (
+		Vector3 p_bottom, HexCell p_bottomCell, 
+		Vector3 p_left, HexCell p_leftCell,
+		Vector3 p_right, HexCell p_rightCell
+	) {
+		ENUM_HexEdgeType leftEdgeType = p_bottomCell.GetEdgeType (p_leftCell);
+		ENUM_HexEdgeType rightEdgeType = p_bottomCell.GetEdgeType (p_rightCell);
+
+		if (leftEdgeType == ENUM_HexEdgeType.Slope) {
+			if (rightEdgeType == ENUM_HexEdgeType.Slope) {
+				TriangulateCornerTerraces (
+					p_bottom, p_bottomCell, p_left, p_leftCell, p_right, p_rightCell);
+				return;
+			}
+		}
+
+		AddTriangle (p_bottom, p_left, p_right);
+		AddTriangleColor (p_bottomCell.Color, p_leftCell.Color, p_rightCell.Color);
+	}
+
+	void TriangulateCornerTerraces(
+		Vector3 p_begin, HexCell p_beginCell,
+		Vector3 p_left, HexCell p_leftCell,
+		Vector3 p_right, HexCell p_rightCell
+	) {
+		Vector3 v3 = HexMetrics.TerraceLerp(p_begin, p_left, 1);
+		Vector3 v4 = HexMetrics.TerraceLerp(p_begin, p_right, 1);
+		Color c3 = HexMetrics.TerraceLerp(p_beginCell.Color, p_leftCell.Color, 1);
+		Color c4 = HexMetrics.TerraceLerp(p_beginCell.Color, p_rightCell.Color, 1);
+
+		AddTriangle(p_begin, v3, v4);
+		AddTriangleColor(p_beginCell.Color, c3, c4);
+
+		for (int i = 2; i < HexMetrics._terraceSteps; i++) {
+			Vector3 v1 = v3;
+			Vector3 v2 = v4;
+			Color c1 = c3;
+			Color c2 = c4;
+			v3 = HexMetrics.TerraceLerp(p_begin, p_left, i);
+			v4 = HexMetrics.TerraceLerp(p_begin, p_right, i);
+			c3 = HexMetrics.TerraceLerp(p_beginCell.Color, p_leftCell.Color, i);
+			c4 = HexMetrics.TerraceLerp(p_beginCell.Color, p_rightCell.Color, i);
+
+			AddQuad(v1, v2, v3, v4);
+			AddQuadColor(c1, c2, c3, c4);
 		}
 	}
 
