@@ -159,6 +159,9 @@ public class HexMesh : MonoBehaviour {
 				);
 				return;
 			}
+
+			TriangulateCornerTerracesCliff (p_right, p_rightCell, p_bottom, p_bottomCell, p_left, p_leftCell);
+			return;
 		}
 
 		if (rightEdgeType == ENUM_HexEdgeType.Slope) {
@@ -200,6 +203,50 @@ public class HexMesh : MonoBehaviour {
 			AddQuad(v1, v2, v3, v4);
 			AddQuadColor(c1, c2, c3, c4);
 		}
+	}
+
+	void TriangulateCornerTerracesCliff(
+		Vector3 p_begin, HexCell p_beginCell,
+		Vector3 p_left, HexCell p_leftCell,
+		Vector3 p_right, HexCell p_rightCell
+	) {
+		float b = 1f / (p_rightCell.Elevation - p_beginCell.Elevation);
+		Vector3 boundary = Vector3.Lerp (p_begin, p_right, b);
+		Color boundaryColor = Color.Lerp (p_beginCell.Color, p_rightCell.Color, b);
+
+		TriangulateBoundaryTriangle (
+			p_begin, p_beginCell, p_left, p_leftCell, boundary, boundaryColor);
+
+		if (p_leftCell.GetEdgeType (p_rightCell) == ENUM_HexEdgeType.Slope) {
+			TriangulateBoundaryTriangle (p_left, p_leftCell, p_right, p_rightCell, boundary, boundaryColor);
+		} else {
+			AddTriangle (p_left, p_right, boundary);
+			AddTriangleColor (p_leftCell.Color, p_rightCell.Color, boundaryColor);
+		}
+	}
+
+	void TriangulateBoundaryTriangle(
+		Vector3 p_begin, HexCell p_beginCell,
+		Vector3 p_left, HexCell p_leftCell,
+		Vector3 p_boundary, Color p_boundaryColor
+	) {
+		Vector3 v2 = HexMetrics.TerraceLerp (p_begin, p_left, 1);
+		Color c2 = HexMetrics.TerraceLerp (p_beginCell.Color, p_leftCell.Color, 1);
+
+		AddTriangle (p_begin, v2, p_boundary);
+		AddTriangleColor (p_beginCell.Color, c2, p_boundaryColor);
+
+		for (int i = 2; i < HexMetrics._terraceSteps; i++) {
+			Vector3 v1 = v2;
+			Color c1 = c2;
+			v2 = HexMetrics.TerraceLerp (p_begin, p_left, i);
+			c2 = HexMetrics.TerraceLerp (p_beginCell.Color, p_leftCell.Color, i);
+			AddTriangle (v1, v2, p_boundary);
+			AddTriangleColor (c1, c2, p_boundaryColor);
+		}
+
+		AddTriangle (v2, p_left, p_boundary);
+		AddTriangleColor (c2, p_leftCell.Color, p_boundaryColor);
 	}
 
 	void AddTriangleColor(Color p_color) {
