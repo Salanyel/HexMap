@@ -13,6 +13,12 @@ public class HexCell : MonoBehaviour {
 	Color _color;
 
 	[SerializeField]
+	int _elevation;
+
+	[SerializeField]
+	RectTransform _uiRect;
+
+	[SerializeField]
 	HexCell[] _neighbors;
 
 	public HexCoordinates Coordinates {
@@ -23,6 +29,24 @@ public class HexCell : MonoBehaviour {
 	public Color Color {
 		get { return _color; }
 		set { _color = value; }
+	}
+
+	public int Elevation {
+		get { return _elevation; }
+		set { 
+			_elevation = value;
+			Vector3 position = transform.localPosition;
+			position.y = value * HexMetrics._elevationStep;
+			transform.localPosition = position;
+
+			Vector3 uiPosition = _uiRect.localPosition;
+			uiPosition.z = _elevation * -HexMetrics._elevationStep;
+			_uiRect.localPosition = uiPosition;
+		}
+	}
+
+	public RectTransform UIRect {
+		set { _uiRect = value; }
 	}
 
 	#endregion
@@ -36,6 +60,14 @@ public class HexCell : MonoBehaviour {
 	public void SetNeighbor(ENUM_HexDirection p_direction, HexCell p_cell) {
 		_neighbors [(int)p_direction] = p_cell;
 		p_cell._neighbors [(int)p_direction.Opposite ()] = this;
+	}
+
+	public ENUM_HexEdgeType GetEdgeType(ENUM_HexDirection p_direction) {
+		return HexMetrics.GetEdgeType(_elevation, _neighbors[(int) p_direction].Elevation);
+	}
+
+	public ENUM_HexEdgeType GetEdgeType(HexCell p_cell) {
+		return HexMetrics.GetEdgeType (_elevation, p_cell.Elevation);
 	}
 
 	#endregion
