@@ -151,38 +151,29 @@ public class HexMesh : MonoBehaviour {
 			if (rightEdgeType == ENUM_HexEdgeType.Slope) {
 				TriangulateCornerTerraces (
 					p_bottom, p_bottomCell, p_left, p_leftCell, p_right, p_rightCell);
+			} else if (rightEdgeType == ENUM_HexEdgeType.Flat) {
+				TriangulateCornerTerraces (p_left, p_leftCell, p_right, p_rightCell, p_bottom, p_bottomCell);
+			} else {
+				TriangulateCornerTerracesCliff (p_right, p_rightCell, p_bottom, p_bottomCell, p_left, p_leftCell);
 				return;
 			}
-			if (rightEdgeType == ENUM_HexEdgeType.Flat) {
-				TriangulateCornerTerraces(
-					p_left, p_leftCell, p_right, p_rightCell, p_bottom, p_bottomCell
-				);
-				return;
-			}
-
-			TriangulateCornerTerracesCliff (p_right, p_rightCell, p_bottom, p_bottomCell, p_left, p_leftCell);
-			return;
-		}
-
-		if (rightEdgeType == ENUM_HexEdgeType.Slope) {
+		} else if (rightEdgeType == ENUM_HexEdgeType.Slope) {
 			if (leftEdgeType == ENUM_HexEdgeType.Flat) {
-				TriangulateCornerTerraces(p_right, p_rightCell, p_bottom, p_bottomCell, p_left, p_leftCell);
+				TriangulateCornerTerraces (p_right, p_rightCell, p_bottom, p_bottomCell, p_left, p_leftCell);
+			} else {
+				TriangulateCornerCliffTerraces (p_bottom, p_bottomCell, p_left, p_leftCell, p_right, p_rightCell);
 				return;
 			}
-			TriangulateCornerCliffTerraces (p_bottom, p_bottomCell, p_left, p_leftCell, p_right, p_rightCell);
-			return;
-		}
-
-		if (p_leftCell.GetEdgeType (p_rightCell) == ENUM_HexEdgeType.Slope) {
+		} else if (p_leftCell.GetEdgeType (p_rightCell) == ENUM_HexEdgeType.Slope) {
 			if (p_leftCell.Elevation < p_rightCell.Elevation) {
 				TriangulateCornerCliffTerraces (p_right, p_rightCell, p_bottom, p_bottomCell, p_left, p_leftCell);
 			} else {
 				TriangulateCornerTerracesCliff (p_left, p_leftCell, p_right, p_rightCell, p_bottom, p_bottomCell);
 			}
-		} 
-
-		AddTriangle (p_bottom, p_left, p_right);
-		AddTriangleColor (p_bottomCell.Color, p_leftCell.Color, p_rightCell.Color);
+		} else {
+			AddTriangle (p_bottom, p_left, p_right);
+			AddTriangleColor (p_bottomCell.Color, p_leftCell.Color, p_rightCell.Color);
+		}
 	}
 
 	void TriangulateCornerTerraces(
