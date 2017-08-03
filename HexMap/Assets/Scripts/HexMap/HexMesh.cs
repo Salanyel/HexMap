@@ -166,12 +166,20 @@ public class HexMesh : MonoBehaviour {
 
 		if (rightEdgeType == ENUM_HexEdgeType.Slope) {
 			if (leftEdgeType == ENUM_HexEdgeType.Flat) {
-				TriangulateCornerTerraces(
-					p_right, p_rightCell, p_bottom, p_bottomCell, p_left, p_leftCell
-				);
+				TriangulateCornerTerraces(p_right, p_rightCell, p_bottom, p_bottomCell, p_left, p_leftCell);
 				return;
 			}
+			TriangulateCornerCliffTerraces (p_bottom, p_bottomCell, p_left, p_leftCell, p_right, p_rightCell);
+			return;
 		}
+
+		if (p_leftCell.GetEdgeType (p_rightCell) == ENUM_HexEdgeType.Slope) {
+			if (p_leftCell.Elevation < p_rightCell.Elevation) {
+				TriangulateCornerCliffTerraces (p_right, p_rightCell, p_bottom, p_bottomCell, p_left, p_leftCell);
+			} else {
+				TriangulateCornerTerracesCliff (p_left, p_leftCell, p_right, p_rightCell, p_bottom, p_bottomCell);
+			}
+		} 
 
 		AddTriangle (p_bottom, p_left, p_right);
 		AddTriangleColor (p_bottomCell.Color, p_leftCell.Color, p_rightCell.Color);
@@ -213,10 +221,36 @@ public class HexMesh : MonoBehaviour {
 		float b = 1f / (p_rightCell.Elevation - p_beginCell.Elevation);
 		Vector3 boundary = Vector3.Lerp (p_begin, p_right, b);
 		Color boundaryColor = Color.Lerp (p_beginCell.Color, p_rightCell.Color, b);
+		if (b < 0) {
+			b = -b;
+		}
 
 		TriangulateBoundaryTriangle (
 			p_begin, p_beginCell, p_left, p_leftCell, boundary, boundaryColor);
 
+		if (p_leftCell.GetEdgeType (p_rightCell) == ENUM_HexEdgeType.Slope) {
+			TriangulateBoundaryTriangle (p_left, p_leftCell, p_right, p_rightCell, boundary, boundaryColor);
+		} else {
+			AddTriangle (p_left, p_right, boundary);
+			AddTriangleColor (p_leftCell.Color, p_rightCell.Color, boundaryColor);
+		}
+	}
+
+	void TriangulateCornerCliffTerraces(	
+		Vector3 p_begin, HexCell p_beginCell,
+		Vector3 p_left, HexCell p_leftCell,
+		Vector3 p_right, HexCell p_rightCell
+	) {
+		float b = 1f / (p_leftCell.Elevation - p_beginCell.Elevation);
+		Vector3 boundary = Vector3.Lerp (p_begin, p_left, b);
+		Color boundaryColor = Color.Lerp (p_beginCell.Color, p_leftCell.Color, b);
+		if (b < 0) {
+			b = -b;
+		}
+
+		TriangulateBoundaryTriangle (
+			p_right, p_rightCell, p_begin, p_beginCell, boundary, boundaryColor);
+			
 		if (p_leftCell.GetEdgeType (p_rightCell) == ENUM_HexEdgeType.Slope) {
 			TriangulateBoundaryTriangle (p_left, p_leftCell, p_right, p_rightCell, boundary, boundaryColor);
 		} else {
