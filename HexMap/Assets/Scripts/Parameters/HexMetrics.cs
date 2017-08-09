@@ -24,6 +24,9 @@ public static class HexMetrics {
 	public const float _solidFactor = 0.75f;
 	public const float _blendFactor = 1 - _solidFactor;
 
+	public const float _cellPerturbStrengh = 5f;
+	public const float _cellPerturbElevation = 1.5f;
+	public const float _noiseScale = 0.003f;
 	public static Texture2D _noiseSource;
 
 	static Vector3[] _corners = {
@@ -90,7 +93,7 @@ public static class HexMetrics {
 	}
 
 	public static Vector4 SampleNoise(Vector3 p_position) {
-		return _noiseSource.GetPixelBilinear (p_position.x, p_position.z);
+		return _noiseSource.GetPixelBilinear (p_position.x * _noiseScale, p_position.z * _noiseScale);
 	}
 
 	#endregion

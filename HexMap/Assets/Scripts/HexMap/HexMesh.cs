@@ -42,7 +42,7 @@ public class HexMesh : MonoBehaviour {
 	}
 
 	void Triangulate (ENUM_HexDirection p_direction, HexCell p_cell) {
-		Vector3 center = p_cell.transform.localPosition;
+		Vector3 center = p_cell.Position;
 		Vector3 v1 = center + HexMetrics.GetFirstSolidCorner(p_direction);
 		Vector3 v2 = center + HexMetrics.GetSecondSolidCorner(p_direction);
 
@@ -65,7 +65,7 @@ public class HexMesh : MonoBehaviour {
 		Vector3 bridge = HexMetrics.GetBridge(p_direction);
 		Vector3 v3 = p_v1 + bridge;
 		Vector3 v4 = p_v2 + bridge;
-		v3.y = v4.y = neighbor.Elevation * HexMetrics._elevationStep;
+		v3.y = v4.y = neighbor.Position.y;
 
 		if (p_cell.GetEdgeType(p_direction) == ENUM_HexEdgeType.Slope) {
 			TriangulateEdgeTerraces(p_v1, p_v2, p_cell, v3, v4, neighbor);
@@ -78,7 +78,7 @@ public class HexMesh : MonoBehaviour {
 		HexCell nextNeighbor = p_cell.GetNeighbor(p_direction.Next());
 		if (p_direction <= ENUM_HexDirection.E && nextNeighbor != null) {
 			Vector3 v5 = p_v2 + HexMetrics.GetBridge(p_direction.Next());
-			v5.y = nextNeighbor.Elevation * HexMetrics._elevationStep;
+			v5.y = nextNeighbor.Position.y;
 
 			if (p_cell.Elevation <= neighbor.Elevation) {
 				if (p_cell.Elevation <= nextNeighbor.Elevation) {
@@ -338,9 +338,9 @@ public class HexMesh : MonoBehaviour {
 
 	Vector3 Perturb(Vector3 p_position) {
 		Vector4 sample = HexMetrics.SampleNoise (p_position);
-		p_position.x += sample.x * 2f - 1f;
-		p_position.y += sample.y * 2f - 1f;
-		p_position.z += sample.z * 2f - 1f;
+		p_position.x += (sample.x * 2f - 1f) * HexMetrics._cellPerturbStrengh;
+		//p_position.y += (sample.y * 2f - 1f) * HexMetrics._cellPerturbStrengh;
+		p_position.z += (sample.z * 2f - 1f) * HexMetrics._cellPerturbStrengh;
 		return p_position;
 	}
 }
