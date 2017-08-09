@@ -288,9 +288,9 @@ public class HexMesh : MonoBehaviour {
 
 	void AddTriangle (Vector3 p_v1, Vector3 p_v2, Vector3 p_v3) {
 		int vertexIndex = _vertices.Count;
-		_vertices.Add(p_v1);
-		_vertices.Add(p_v2);
-		_vertices.Add(p_v3);
+		_vertices.Add(Perturb(p_v1));
+		_vertices.Add(Perturb(p_v2));
+		_vertices.Add(Perturb(p_v3));
 		_triangles.Add(vertexIndex);
 		_triangles.Add(vertexIndex + 1);
 		_triangles.Add(vertexIndex + 2);
@@ -310,10 +310,10 @@ public class HexMesh : MonoBehaviour {
 
 	void AddQuad (Vector3 p_v1, Vector3 p_v2, Vector3 p_v3, Vector3 p_v4) {
 		int vertexIndex = _vertices.Count;
-		_vertices.Add(p_v1);
-		_vertices.Add(p_v2);
-		_vertices.Add(p_v3);
-		_vertices.Add(p_v4);
+		_vertices.Add(Perturb(p_v1));
+		_vertices.Add(Perturb(p_v2));
+		_vertices.Add(Perturb(p_v3));
+		_vertices.Add(Perturb(p_v4));
 		_triangles.Add(vertexIndex);
 		_triangles.Add(vertexIndex + 2);
 		_triangles.Add(vertexIndex + 1);
@@ -334,5 +334,13 @@ public class HexMesh : MonoBehaviour {
 		_colors.Add(p_c2);
 		_colors.Add(p_c3);
 		_colors.Add(p_c4);
+	}
+
+	Vector3 Perturb(Vector3 p_position) {
+		Vector4 sample = HexMetrics.SampleNoise (p_position);
+		p_position.x += sample.x * 2f - 1f;
+		p_position.y += sample.y * 2f - 1f;
+		p_position.z += sample.z * 2f - 1f;
+		return p_position;
 	}
 }

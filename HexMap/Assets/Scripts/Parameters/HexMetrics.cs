@@ -9,6 +9,9 @@ public enum ENUM_HexEdgeType {
 }
 
 public static class HexMetrics {
+
+	#region Variables
+
 	public const float _outerRadius = 10f;
 	public const float _innerRadius = _outerRadius * 0.866025404f;
 
@@ -21,6 +24,8 @@ public static class HexMetrics {
 	public const float _solidFactor = 0.75f;
 	public const float _blendFactor = 1 - _solidFactor;
 
+	public static Texture2D _noiseSource;
+
 	static Vector3[] _corners = {
 		new Vector3 (0f, 0f, _outerRadius),
 		new Vector3 (_innerRadius, 0f, 0.5f * _outerRadius),
@@ -30,6 +35,10 @@ public static class HexMetrics {
 		new Vector3 (-_innerRadius, 0f, 0.5f * _outerRadius),
 		new Vector3 (0f, 0f, _outerRadius),
 	};
+
+	#endregion
+
+	#region Methods
 
 	public static Vector3 GetFirstCorner(ENUM_HexDirection p_direction) {
 		return _corners [(int)p_direction];
@@ -79,4 +88,10 @@ public static class HexMetrics {
 
 		return ENUM_HexEdgeType.Cliff;
 	}
+
+	public static Vector4 SampleNoise(Vector3 p_position) {
+		return _noiseSource.GetPixelBilinear (p_position.x, p_position.z);
+	}
+
+	#endregion
 }

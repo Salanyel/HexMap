@@ -20,6 +20,9 @@ public class HexGrid : MonoBehaviour {
 	[SerializeField]
 	Color _defaultColor = Color.white;
 
+	[SerializeField]
+	Texture2D _noiseSource;
+
 	Canvas _gridCanvas;
 	HexMesh _hexMesh;
 
@@ -40,6 +43,7 @@ public class HexGrid : MonoBehaviour {
 	void Awake() {
 		_gridCanvas = GetComponentInChildren<Canvas>();
 		_hexMesh = GetComponentInChildren<HexMesh> ();
+		HexMetrics._noiseSource = _noiseSource;
 
 		_cells = new HexCell[_height * _width];
 
