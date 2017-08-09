@@ -24,7 +24,7 @@ public class HexGrid : MonoBehaviour {
 	Texture2D _noiseSource;
 
 	Canvas _gridCanvas;
-	HexMesh _hexMesh;
+	HexMesh __hexMesh;
 
 	public int Width {
 		get { return _width; }
@@ -42,7 +42,7 @@ public class HexGrid : MonoBehaviour {
 
 	void Awake() {
 		_gridCanvas = GetComponentInChildren<Canvas>();
-		_hexMesh = GetComponentInChildren<HexMesh> ();
+		__hexMesh = GetComponentInChildren<HexMesh> ();
 		HexMetrics._noiseSource = _noiseSource;
 
 		_cells = new HexCell[_height * _width];
@@ -55,7 +55,7 @@ public class HexGrid : MonoBehaviour {
 	}
 
 	void Start() {
-		_hexMesh.Triangulate (_cells);
+		__hexMesh.Triangulate (_cells);
 	}
 
 	#endregion
@@ -70,7 +70,7 @@ public class HexGrid : MonoBehaviour {
 	}
 
 	public void Refresh() {
-		_hexMesh.Triangulate (_cells);
+		__hexMesh.Triangulate (_cells);
 	}
 
 	void CreateCell(int p_x, int p_z, int p_i) {
