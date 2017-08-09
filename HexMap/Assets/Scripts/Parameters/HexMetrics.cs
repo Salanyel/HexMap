@@ -9,17 +9,25 @@ public enum ENUM_HexEdgeType {
 }
 
 public static class HexMetrics {
+
+	#region Variables
+
 	public const float _outerRadius = 10f;
 	public const float _innerRadius = _outerRadius * 0.866025404f;
 
-	public const float _elevationStep = 5f;
+	public const float _elevationStep = 3f;
 	public const int _terracesPerSlope = 2;
 	public const int _terraceSteps = _terracesPerSlope * 2 + 1;
 	public const float _horizontalTerraceStepSize = 1f / _terraceSteps;
 	public const float _verticalTerraceStepSize = 1f / (_terracesPerSlope + 1);
 
-	public const float _solidFactor = 0.75f;
+	public const float _solidFactor = 0.82f;
 	public const float _blendFactor = 1 - _solidFactor;
+
+	public const float _cellPerturbStrengh = 3f;
+	public const float _cellPerturbElevation = 1.5f;
+	public const float _noiseScale = 0.003f;
+	public static Texture2D _noiseSource;
 
 	static Vector3[] _corners = {
 		new Vector3 (0f, 0f, _outerRadius),
@@ -31,24 +39,28 @@ public static class HexMetrics {
 		new Vector3 (0f, 0f, _outerRadius),
 	};
 
-	public static Vector3 GetFirstCorner(ENUM_HexDirection p_direction) {
-		return _corners [(int)p_direction];
+	#endregion
+
+	#region Methods
+
+	public static Vector3 GetFirstCorner(ENUM_HexDirection p__direction) {
+		return _corners [(int)p__direction];
 	}
 
-	public static Vector3 GetSecondCorner(ENUM_HexDirection p_direction) {
-		return _corners [(int)p_direction + 1];
+	public static Vector3 GetSecondCorner(ENUM_HexDirection p__direction) {
+		return _corners [(int)p__direction + 1];
 	}
 
-	public static Vector3 GetFirstSolidCorner(ENUM_HexDirection p_direction) {
-		return _corners [(int)p_direction] * _solidFactor;
+	public static Vector3 GetFirstSolidCorner(ENUM_HexDirection p__direction) {
+		return _corners [(int)p__direction] * _solidFactor;
 	}
 
-	public static Vector3 GetSecondSolidCorner(ENUM_HexDirection p_direction) {
-		return _corners [(int)p_direction + 1] * _solidFactor;
+	public static Vector3 GetSecondSolidCorner(ENUM_HexDirection p__direction) {
+		return _corners [(int)p__direction + 1] * _solidFactor;
 	}
 
-	public static Vector3 GetBridge(ENUM_HexDirection p_direction) {
-		return (_corners[(int)p_direction] + _corners[(int) p_direction + 1]) * _blendFactor;
+	public static Vector3 GetBridge(ENUM_HexDirection p__direction) {
+		return (_corners[(int)p__direction] + _corners[(int) p__direction + 1]) * _blendFactor;
 	}
 
 	public static Vector3 TerraceLerp(Vector3 p_a, Vector3 p_b, int p_step) {
@@ -79,4 +91,10 @@ public static class HexMetrics {
 
 		return ENUM_HexEdgeType.Cliff;
 	}
+
+	public static Vector4 SampleNoise(Vector3 p_position) {
+		return _noiseSource.GetPixelBilinear (p_position.x * _noiseScale, p_position.z * _noiseScale);
+	}
+
+	#endregion
 }

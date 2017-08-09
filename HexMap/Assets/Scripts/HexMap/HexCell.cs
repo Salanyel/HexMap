@@ -21,6 +21,10 @@ public class HexCell : MonoBehaviour {
 	[SerializeField]
 	HexCell[] _neighbors;
 
+	public Vector3 Position {
+		get { return transform.localPosition; }
+	}
+
 	public HexCoordinates Coordinates {
 		get { return _coordinates; }
 		set { _coordinates = value; }
@@ -37,10 +41,11 @@ public class HexCell : MonoBehaviour {
 			_elevation = value;
 			Vector3 position = transform.localPosition;
 			position.y = value * HexMetrics._elevationStep;
+			position.y += (HexMetrics.SampleNoise (position).y * 2f - 1f) * HexMetrics._cellPerturbElevation;
 			transform.localPosition = position;
 
 			Vector3 uiPosition = _uiRect.localPosition;
-			uiPosition.z = _elevation * -HexMetrics._elevationStep;
+			uiPosition.z = -position.y;
 			_uiRect.localPosition = uiPosition;
 		}
 	}
