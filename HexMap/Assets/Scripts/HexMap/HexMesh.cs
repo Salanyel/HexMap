@@ -46,17 +46,24 @@ public class HexMesh : MonoBehaviour {
 		Vector3 v1 = center + HexMetrics.GetFirstSolidCorner(p_direction);
 		Vector3 v2 = center + HexMetrics.GetSecondSolidCorner(p_direction);
 
-		AddTriangle(center, v1, v2);
+		Vector3 e1 = Vector3.Lerp (v1, v2, 1f / 3f);
+		Vector3 e2 = Vector3.Lerp (v1, v2, 2f / 3f);
+
+		AddTriangle(center, v1, e1);
+		AddTriangleColor(p_cell.Color);
+		AddTriangle(center, e1, e2);
+		AddTriangleColor(p_cell.Color);
+		AddTriangle(center, e2, v2);
 		AddTriangleColor(p_cell.Color);
 
 		if (p_direction <= ENUM_HexDirection.SE) {
-			TriangulateConnection(p_direction, p_cell, v1, v2);
+			TriangulateConnection(p_direction, p_cell, v1, e1, e2, v2);
 		}
 	}
 
 	void TriangulateConnection (
-		ENUM_HexDirection p_direction, HexCell p_cell, Vector3 p_v1, Vector3 p_v2
-	) {
+		ENUM_HexDirection p_direction, HexCell p_cell, Vector3 p_v1, Vector3 p_e1, Vector3 p_e2, Vector3 p_v2) {
+
 		HexCell neighbor = p_cell.GetNeighbor(p_direction);
 		if (neighbor == null) {
 			return;
@@ -67,11 +74,18 @@ public class HexMesh : MonoBehaviour {
 		Vector3 v4 = p_v2 + bridge;
 		v3.y = v4.y = neighbor.Position.y;
 
+		Vector3 e3 = Vector3.Lerp(v3, v4, 1f / 3f);
+		Vector3 e4 = Vector3.Lerp(v3, v4, 2f / 3f);
+
 		if (p_cell.GetEdgeType(p_direction) == ENUM_HexEdgeType.Slope) {
 			TriangulateEdgeTerraces(p_v1, p_v2, p_cell, v3, v4, neighbor);
 		}
 		else {
-			AddQuad(p_v1, p_v2, v3, v4);
+			AddQuad(p_v1, p_e1, v3, e3);
+			AddQuadColor(p_cell.Color, neighbor.Color);
+			AddQuad(p_e1, p_e2, e3, e4);
+			AddQuadColor(p_cell.Color, neighbor.Color);
+			AddQuad(p_e2, p_v2, e4, v4);
 			AddQuadColor(p_cell.Color, neighbor.Color);
 		}
 
