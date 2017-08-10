@@ -6,10 +6,10 @@ public class HexGrid : MonoBehaviour {
 	#region Variables
 
 	[SerializeField]
-	int _width = 6;
+	int _chunkCountX = 4;
 
 	[SerializeField]
-	int _height = 6;
+	int _chunkCountZ = 3;
 
 	[SerializeField]
 	HexCell _cellPrefab;
@@ -26,12 +26,15 @@ public class HexGrid : MonoBehaviour {
 	Canvas _gridCanvas;
 	HexMesh __hexMesh;
 
-	public int Width {
-		get { return _width; }
+	int _cellCountX = 6;
+	int _cellCountZ = 6;
+
+	public int CellCountX {
+		get { return _cellCountX; }
 	}
 
-	public int Height {
-		get { return _height; }
+	public int CellCountZ {
+		get { return _cellCountZ; }
 	}
 
 	HexCell[] _cells;
@@ -45,13 +48,12 @@ public class HexGrid : MonoBehaviour {
 		__hexMesh = GetComponentInChildren<HexMesh> ();
 		HexMetrics._noiseSource = _noiseSource;
 
-		_cells = new HexCell[_height * _width];
+		_cellCountX = _chunkCountX * HexMetrics._chunkSizeX;
+		_cellCountZ = _chunkCountZ * HexMetrics._chunkSizeZ;
 
-		for (int z = 0, i = 0; z < _height; ++z) {
-			for (int x = 0; x < _width; ++x) {
-				CreateCell (x, z, i++);
-			}
-		}
+		_cells = new HexCell[_cellCountZ * _cellCountX];
+
+		CreateCells ();
 	}
 
 	void Start() {
@@ -62,10 +64,18 @@ public class HexGrid : MonoBehaviour {
 
 	#region Methods
 
+	void CreateCells() {
+		for (int z = 0, i = 0; z < _cellCountZ; ++z) {
+			for (int x = 0; x < _cellCountX; ++x) {
+				CreateCell (x, z, i++);
+			}
+		}
+	}
+
 	public HexCell GetCell (Vector3 p_position) {
 		p_position = transform.InverseTransformPoint (p_position);
 		HexCoordinates coordinates = HexCoordinates.FromPosition (p_position);
-		int index = coordinates.X + coordinates.Z * Width + coordinates.Z / 2;
+		int index = coordinates.X + coordinates.Z * _chunkCountX + coordinates.Z / 2;
 		return _cells [index];
 	}
 
@@ -92,16 +102,16 @@ public class HexGrid : MonoBehaviour {
 
 		if (p_z > 0) {
 			if ((p_z & 1) == 0) {
-				cell.SetNeighbor (ENUM_HexDirection.SE, _cells [p_i - _width]);
+				cell.SetNeighbor (ENUM_HexDirection.SE, _cells [p_i - _cellCountX]);
 
 				if (p_x > 0) {
-					cell.SetNeighbor (ENUM_HexDirection.SW, _cells [p_i - _width - 1]);
+					cell.SetNeighbor (ENUM_HexDirection.SW, _cells [p_i - _cellCountX - 1]);
 				}
 			} else {
-				cell.SetNeighbor (ENUM_HexDirection.SW, _cells [p_i - _width]);
+				cell.SetNeighbor (ENUM_HexDirection.SW, _cells [p_i - _cellCountX]);
 
-				if (p_x < _width - 1) {
-					cell.SetNeighbor (ENUM_HexDirection.SE, _cells [p_i - _width + 1]);
+				if (p_x < _cellCountX - 1) {
+					cell.SetNeighbor (ENUM_HexDirection.SE, _cells [p_i - _cellCountX + 1]);
 				}
 			}
 		}

@@ -29,6 +29,9 @@ public static class HexMetrics {
 	public const float _noiseScale = 0.003f;
 	public static Texture2D _noiseSource;
 
+	public const int _chunkSizeX = 5;
+	public const int _chunkSizeZ = 5;
+
 	static Vector3[] _corners = {
 		new Vector3 (0f, 0f, _outerRadius),
 		new Vector3 (_innerRadius, 0f, 0.5f * _outerRadius),

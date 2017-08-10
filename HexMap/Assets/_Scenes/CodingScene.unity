@@ -1083,8 +1083,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9df28d254596741e289a29d5fb4dd373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _width: 10
-  _height: 10
+  _chunkCountX: 1
+  _chunkCountZ: 1
   _cellPrefab: {fileID: 114989802429633988, guid: 752a8af45b3104cc1bc52c9db94abd05,
     type: 2}
   _cellLabelPrefab: {fileID: 114168443992409972, guid: 5a9055ef4287a40b39d5216701e41491,
