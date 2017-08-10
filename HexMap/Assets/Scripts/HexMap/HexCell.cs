@@ -51,6 +51,7 @@ public class HexCell : MonoBehaviour {
 	}
 
 	public RectTransform UIRect {
+		get { return _uiRect; }
 		set { _uiRect = value; }
 	}
 

@@ -96,7 +96,7 @@ public static class HexMetrics {
 	}
 
 	public static Vector4 SampleNoise(Vector3 p_position) {
-		return _noiseSource.GetPixelBilinear (p_position.x * _noiseScale, p_position.z * _noiseScale);
+		return _noiseSource.GetPixelBilinear (p_position.x * HexMetrics._noiseScale, p_position.z * HexMetrics._noiseScale);
 	}
 
 	#endregion
