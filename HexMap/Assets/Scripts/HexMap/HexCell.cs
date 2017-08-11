@@ -13,13 +13,16 @@ public class HexCell : MonoBehaviour {
 	Color _color;
 
 	[SerializeField]
-	int _elevation;
+	int _elevation = int.MinValue;
 
 	[SerializeField]
 	RectTransform _uiRect;
 
 	[SerializeField]
 	HexCell[] _neighbors;
+
+	[SerializeField]
+	HexGridChunk _chunk;
 
 	public Vector3 Position {
 		get { return transform.localPosition; }
@@ -32,12 +35,22 @@ public class HexCell : MonoBehaviour {
 
 	public Color Color {
 		get { return _color; }
-		set { _color = value; }
+		set { 
+			if (_color == value) {
+				return;
+			}
+			_color = value;
+			Refresh ();
+		}
 	}
 
 	public int Elevation {
 		get { return _elevation; }
 		set { 
+			if (_elevation == value) {
+				return;
+			}
+
 			_elevation = value;
 			Vector3 position = transform.localPosition;
 			position.y = value * HexMetrics._elevationStep;
@@ -47,12 +60,17 @@ public class HexCell : MonoBehaviour {
 			Vector3 uiPosition = _uiRect.localPosition;
 			uiPosition.z = -position.y;
 			_uiRect.localPosition = uiPosition;
+			Refresh ();
 		}
 	}
 
 	public RectTransform UIRect {
 		get { return _uiRect; }
 		set { _uiRect = value; }
+	}
+
+	public HexGridChunk Chunk {
+		set { _chunk = value; }
 	}
 
 	#endregion
@@ -74,6 +92,18 @@ public class HexCell : MonoBehaviour {
 
 	public ENUM_HexEdgeType GetEdgeType(HexCell p_cell) {
 		return HexMetrics.GetEdgeType (_elevation, p_cell.Elevation);
+	}
+
+	void Refresh() {
+		if (_chunk) {
+			_chunk.Refresh ();
+			for (int i = 0; _neighbors.Length; ++i) {
+				HexCell neighbor = _neighbors [i];
+				if (neighbor != null & neighbor._chunk != _chunk) {
+					neighbor.Chunk.Refresh ();
+				}
+			}
+		}
 	}
 
 	#endregion
