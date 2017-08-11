@@ -97,10 +97,11 @@ public class HexCell : MonoBehaviour {
 	void Refresh() {
 		if (_chunk) {
 			_chunk.Refresh ();
-			for (int i = 0; _neighbors.Length; ++i) {
+
+			for (int i = 0; i < _neighbors.Length; ++i) {
 				HexCell neighbor = _neighbors [i];
-				if (neighbor != null & neighbor._chunk != _chunk) {
-					neighbor.Chunk.Refresh ();
+				if (neighbor != null && neighbor._chunk != _chunk) {
+					neighbor._chunk.Refresh ();
 				}
 			}
 		}

@@ -81,7 +81,7 @@ public class HexGrid : MonoBehaviour {
 	public HexCell GetCell (Vector3 p_position) {
 		p_position = transform.InverseTransformPoint (p_position);
 		HexCoordinates coordinates = HexCoordinates.FromPosition (p_position);
-		int index = coordinates.X + coordinates.Z * _chunkCountX + coordinates.Z / 2;
+		int index = coordinates.X + coordinates.Z * _chunkCountX * HexMetrics._chunkSizeX + coordinates.Z / 2;
 		return _cells [index];
 	}
 

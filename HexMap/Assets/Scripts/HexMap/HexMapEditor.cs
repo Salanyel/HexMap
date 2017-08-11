@@ -41,6 +41,7 @@ public class HexMapEditor : MonoBehaviour {
 	}
 
 	public void EditCell(HexCell p_cell) {
+		Debug.Log (p_cell.name, p_cell.gameObject);
 		p_cell.Color = _activeColor;
 		p_cell.Elevation = _activeElevation;
 	}
