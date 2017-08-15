@@ -192,10 +192,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c227882b21701465d81c4b5d0703025c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveSpeedMinZoom: 400
+  _moveSpeedMaxZoom: 100
   _stickMinZoom: -250
   _stickMaxZoom: -45
   _swivelMinZoom: 90
   _swivelMaxZoom: 45
+  _grid: {fileID: 0}
 --- !u!124 &124639929199364718
 Behaviour:
   m_ObjectHideFlags: 1

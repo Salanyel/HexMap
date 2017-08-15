@@ -29,6 +29,14 @@ public class HexGrid : MonoBehaviour {
 	int _cellCountX;
 	int _cellCountZ;
 
+	public int ChunkCountX {
+		get { return _chunkCountX; }
+	}
+
+	public int ChunkCountZ {
+		get { return _chunkCountZ; }
+	}
+
 	public int CellCountX {
 		get { return _cellCountX; }
 	}
