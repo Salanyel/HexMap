@@ -13,6 +13,7 @@ public class HexMapEditor : MonoBehaviour {
 	int _activeElevation;
 	bool _canApplyColor;
 	bool _canApplyElevation = true;
+	int _brushSize = 0;
 
 	#endregion
 
@@ -38,17 +39,36 @@ public class HexMapEditor : MonoBehaviour {
 		Ray inputRay = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 		if (Physics.Raycast (inputRay, out hit)) {
-			EditCell(_hexGrid.GetCell(hit.point));
+			EditCells(_hexGrid.GetCell(hit.point));
 		}
 	}
 
 	public void EditCell(HexCell p_cell) {
-		if (_canApplyColor) {
-			p_cell.Color = _activeColor;
+		if (p_cell) {
+			if (_canApplyColor) {
+				p_cell.Color = _activeColor;
+			}
+
+			if (_canApplyElevation) {
+				p_cell.Elevation = _activeElevation;
+			}
+		}
+	}
+
+	public void EditCells(HexCell p_center) {
+		int centerX = p_center.Coordinates.X;
+		int centerZ = p_center.Coordinates.Z;
+
+		for (int r = 0, z = centerZ - _brushSize; z <= centerZ; ++z, ++r) {
+			for (int x = centerX - r; x <= centerX + _brushSize; ++x) {
+				EditCell (_hexGrid.GetCell (new HexCoordinates (x, z)));
+			}
 		}
 
-		if (_canApplyElevation) {
-			p_cell.Elevation = _activeElevation;
+		for (int r = 0, z = centerZ + _brushSize; z > centerZ; --z, ++r) {
+			for (int x = centerX - _brushSize; x <= centerX + r; ++x) {
+				EditCell (_hexGrid.GetCell (new HexCoordinates (x, z)));
+			}
 		}
 	}
 
@@ -65,6 +85,10 @@ public class HexMapEditor : MonoBehaviour {
 
 	public void SetCanApplyElevation(bool p_can) {
 		_canApplyElevation = p_can;
+	}
+
+	public void SetBrushSize(float p_size) {
+		_brushSize = (int)p_size;
 	}
 
 	#endregion
