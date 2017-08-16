@@ -194,6 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeedMinZoom: 400
   _moveSpeedMaxZoom: 100
+  _rotationSpeed: 180
   _stickMinZoom: -250
   _stickMaxZoom: -45
   _swivelMinZoom: 90

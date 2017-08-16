@@ -13,6 +13,9 @@ public class HexMapCamera : MonoBehaviour {
 	float _moveSpeedMaxZoom;
 
 	[SerializeField]
+	float _rotationSpeed;
+
+	[SerializeField]
 	float _stickMinZoom;
 
 	[SerializeField]
@@ -30,7 +33,7 @@ public class HexMapCamera : MonoBehaviour {
 	Transform _swivel;
 	Transform _stick;
 	float _zoom = 1f;
-
+	float _rotationAngle;
 	#endregion
 
 	#region Unity_methods
@@ -46,6 +49,7 @@ public class HexMapCamera : MonoBehaviour {
 
 	void Update() {
 		ManageZoom ();
+		ManageRotation ();
 		ManageDisplacement ();
 	}
 
@@ -57,6 +61,13 @@ public class HexMapCamera : MonoBehaviour {
 		float zoomDelta = Input.GetAxis ("Mouse ScrollWheel");
 		if (zoomDelta != 0f) {
 			AdjustZoom (zoomDelta);
+		}
+	}
+
+	void ManageRotation() {
+		float rotationDelta = Input.GetAxis ("Rotation");
+		if (rotationDelta != 0f) {
+			AdjustRotation (rotationDelta);
 		}
 	}
 
@@ -79,8 +90,22 @@ public class HexMapCamera : MonoBehaviour {
 		_swivel.localRotation = Quaternion.Euler (angle, 0f, 0f);
 	}
 
+	void AdjustRotation(float p_delta) {
+		_rotationAngle += p_delta * _rotationSpeed * Time.deltaTime;
+
+		if (_rotationAngle < 0f) {
+			_rotationAngle += 360f;
+		}
+
+		if (_rotationAngle >= 360f) {
+			_rotationAngle -= 360f;
+		}
+
+		transform.localRotation = Quaternion.Euler (0f, _rotationAngle, 0f);
+	}
+
 	void AdjustPosition(float p_x, float p_z) {
-		Vector3 direction = new Vector3 (p_x, 0f, p_z).normalized;
+		Vector3 direction = transform.localRotation * new Vector3 (p_x, 0f, p_z).normalized;
 		float damping = Mathf.Max (Mathf.Abs (p_x), Mathf.Abs (p_z));
 		float distance = Mathf.Lerp(_moveSpeedMinZoom, _moveSpeedMaxZoom, _zoom) * damping * Time.deltaTime;
 
