@@ -11,6 +11,8 @@ public class HexMapEditor : MonoBehaviour {
 	HexGrid _hexGrid;
 	Color _activeColor;
 	int _activeElevation;
+	bool _canApplyColor;
+	bool _canApplyElevation = true;
 
 	#endregion
 
@@ -41,17 +43,28 @@ public class HexMapEditor : MonoBehaviour {
 	}
 
 	public void EditCell(HexCell p_cell) {
-		Debug.Log (p_cell.name, p_cell.gameObject);
-		p_cell.Color = _activeColor;
-		p_cell.Elevation = _activeElevation;
+		if (_canApplyColor) {
+			p_cell.Color = _activeColor;
+		}
+
+		if (_canApplyElevation) {
+			p_cell.Elevation = _activeElevation;
+		}
 	}
 
 	public void SelectColor(int p_index) {
-		_activeColor = _colors [p_index];
+		_canApplyColor = p_index >= 0;
+		if (_canApplyColor) {
+			_activeColor = _colors [p_index];
+		}
 	}
 
 	public void SetElevation(float p_elevation) {
 		_activeElevation = (int) p_elevation;
+	}
+
+	public void SetCanApplyElevation(bool p_can) {
+		_canApplyElevation = p_can;
 	}
 
 	#endregion
