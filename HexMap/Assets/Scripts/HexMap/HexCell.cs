@@ -24,6 +24,11 @@ public class HexCell : MonoBehaviour {
 	[SerializeField]
 	HexGridChunk _chunk;
 
+	bool _hasIncomingRiver;
+	bool _hasOutgoingRiver;
+	ENUM_HexDirection _incomingRiver;
+	ENUM_HexDirection _outgoingRiver;
+
 	public Vector3 Position {
 		get { return transform.localPosition; }
 	}
@@ -73,9 +78,39 @@ public class HexCell : MonoBehaviour {
 		set { _chunk = value; }
 	}
 
+	public bool HasIncomingRiver {
+		get { return _hasIncomingRiver; }
+	}
+
+	public bool HasOutgoingRiver {
+		get { return _hasOutgoingRiver; }
+	}
+
+	public ENUM_HexDirection IncomingRiver {
+		get { return _incomingRiver; }
+	}
+
+	public ENUM_HexDirection OutgoingRiver {
+		get { return _outgoingRiver; }
+	}
+
+	public bool HasRiver {
+		get { return _hasIncomingRiver || _hasOutgoingRiver; }
+	}
+
+	public bool HasRiverBeginOrEnd {
+		get { return _hasIncomingRiver != _hasOutgoingRiver; }
+	}
+
 	#endregion
 
 	#region Methods
+
+	public bool HasRiverThroughEdge(ENUM_HexDirection p_direction) {
+		return
+			_hasIncomingRiver && _incomingRiver ||
+			_hasOutgoingRiver && _outgoingRiver;
+	}
 
 	public HexCell GetNeighbor(ENUM_HexDirection p_direction) {
 		return _neighbors [(int)p_direction];
@@ -94,6 +129,37 @@ public class HexCell : MonoBehaviour {
 		return HexMetrics.GetEdgeType (_elevation, p_cell.Elevation);
 	}
 
+	public void RemoveRiver() {
+		RemoveOutgoingRiver ();
+		RemoveIncomingRiver ();
+	}
+
+	public void RemoveOutgoingRiver () {
+		if (!_hasOutgoingRiver) {
+			return;
+		}
+
+		_hasOutgoingRiver = false;
+		RefreshSelfOnly();
+
+		HexCell neighbor = GetNeighbor (_outgoingRiver);
+		neighbor._hasIncomingRiver = false;
+		neighbor.RefreshSelfOnly();
+	}
+
+	public void RemoveIncomingRiver() {
+		if (!_hasIncomingRiver) {
+			return;
+		}
+
+		_hasIncomingRiver = false;
+		RefreshSelfOnly ();
+
+		HexCell neighbor = GetNeighbor (_incomingRiver);
+		neighbor._hasOutgoingRiver = false;
+		neighbor.RefreshSelfOnly ();
+	}
+
 	void Refresh() {
 		if (_chunk) {
 			_chunk.Refresh ();
@@ -105,6 +171,10 @@ public class HexCell : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	void RefreshSelfOnly() {
+		_chunk.Refresh ();
 	}
 
 	#endregion
