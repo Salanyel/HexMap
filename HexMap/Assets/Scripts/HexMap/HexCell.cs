@@ -112,6 +112,10 @@ public class HexCell : MonoBehaviour {
 		get { return _hasIncomingRiver != _hasOutgoingRiver; }
 	}
 
+	public float StreamBedY {
+		get { return (_elevation + HexMetrics._streamBedElevationOffset) * HexMetrics._elevationStep; }
+	}
+
 	#endregion
 
 	#region Methods
