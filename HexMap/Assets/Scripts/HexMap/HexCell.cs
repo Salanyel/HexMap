@@ -108,8 +108,8 @@ public class HexCell : MonoBehaviour {
 
 	public bool HasRiverThroughEdge(ENUM_HexDirection p_direction) {
 		return
-			_hasIncomingRiver && _incomingRiver ||
-			_hasOutgoingRiver && _outgoingRiver;
+			_hasIncomingRiver && _incomingRiver == p_direction ||
+			_hasOutgoingRiver && _outgoingRiver == p_direction;
 	}
 
 	public HexCell GetNeighbor(ENUM_HexDirection p_direction) {
