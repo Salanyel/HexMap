@@ -160,5 +160,11 @@ public class HexGrid : MonoBehaviour {
 		chunk.AddCell(localX + localZ * HexMetrics._chunkSizeX, p_cell);
 	}
 
+	public void ShowUI(bool p_isVisible) {
+		for (int i = 0; i < _chunks.Length; ++i) {
+			_chunks [i].ShowUI (p_isVisible);
+		}
+	}
+
 	#endregion
 }
