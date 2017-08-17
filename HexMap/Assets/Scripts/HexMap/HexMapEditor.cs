@@ -22,6 +22,10 @@ public class HexMapEditor : MonoBehaviour {
 	int _brushSize = 0;
 	ENUM_OptionalToggle _riverMode;
 
+	bool _isDrag;
+	ENUM_HexDirection _dragDirection;
+	HexCell _previousCell;
+
 	#endregion
 
 	#region Unity_Methods
@@ -33,8 +37,10 @@ public class HexMapEditor : MonoBehaviour {
 	}
 
 	void Update() {
-		if (Input.GetMouseButton (0) && !EventSystem.current.IsPointerOverGameObject()) {
+		if (Input.GetMouseButton (0) && !EventSystem.current.IsPointerOverGameObject ()) {
 			HandleInput ();
+		} else {
+			_previousCell = null;
 		}
 	}
 
@@ -46,7 +52,17 @@ public class HexMapEditor : MonoBehaviour {
 		Ray inputRay = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 		if (Physics.Raycast (inputRay, out hit)) {
-			EditCells(_hexGrid.GetCell(hit.point));
+			HexCell currentCell = _hexGrid.GetCell (hit.point);
+			if (_previousCell && _previousCell != currentCell) {
+				ValidateDrag (currentCell);
+			} else {
+				_isDrag = false;
+			}
+
+			EditCells (currentCell);
+			_previousCell = currentCell;
+		} else {
+			_previousCell = null;
 		}
 	}
 
@@ -58,6 +74,17 @@ public class HexMapEditor : MonoBehaviour {
 
 			if (_canApplyElevation) {
 				p_cell.Elevation = _activeElevation;
+			}
+
+			if (_riverMode == ENUM_OptionalToggle.No) {
+				p_cell.RemoveRiver ();
+			} else if (_isDrag && _riverMode == ENUM_OptionalToggle.Yes) {
+				HexCell otherCell = p_cell.GetNeighbor (_dragDirection.Opposite ());
+				if (otherCell) {
+//					Debug.Log ("--- Outgoing river from " + _previousCell, _previousCell);
+//					Debug.Log (" to " + otherCell + " ---", otherCell);
+					_previousCell.SetOutgoingRiver (_dragDirection);
+				}
 			}
 		}
 	}
@@ -77,6 +104,17 @@ public class HexMapEditor : MonoBehaviour {
 				EditCell (_hexGrid.GetCell (new HexCoordinates (x, z)));
 			}
 		}
+	}
+
+	void ValidateDrag(HexCell p_cell) {
+		for (_dragDirection = ENUM_HexDirection.NE; _dragDirection <= ENUM_HexDirection.NW; ++_dragDirection) {
+			if (_previousCell.GetNeighbor (_dragDirection) == p_cell) {
+				_isDrag = true;
+				return;
+			}
+		}
+
+		_isDrag = false;
 	}
 
 	public void SelectColor(int p_index) {
