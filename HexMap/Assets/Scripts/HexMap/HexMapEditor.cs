@@ -5,6 +5,12 @@ public class HexMapEditor : MonoBehaviour {
 
 	#region Variables 
 
+	enum ENUM_OptionalToggle {
+		Ignore,
+		Yes,
+		No
+	}
+
 	[SerializeField] 
 	Color[] _colors;
 
@@ -14,6 +20,7 @@ public class HexMapEditor : MonoBehaviour {
 	bool _canApplyColor;
 	bool _canApplyElevation = true;
 	int _brushSize = 0;
+	ENUM_OptionalToggle _riverMode;
 
 	#endregion
 
@@ -93,6 +100,10 @@ public class HexMapEditor : MonoBehaviour {
 
 	public void ShowUI(bool p_isVisible) {
 		_hexGrid.ShowUI (p_isVisible);
+	}
+
+	public void SetRiverMode(int p_mode) {
+		_riverMode = (ENUM_OptionalToggle) p_mode;
 	}
 
 	#endregion
