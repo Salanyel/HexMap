@@ -11,6 +11,14 @@ public struct EdgeVertices {
 		v5 = p_corner2;
 	}
 
+	public EdgeVertices(Vector3 p_corner1, Vector3 p_corner2, float p_outerStep) {
+		v1 = p_corner1;
+		v2 = Vector3.Lerp (p_corner1, p_corner2, p_outerStep);
+		v3 = Vector3.Lerp (p_corner1, p_corner2, 2f / 4f);
+		v4 = Vector3.Lerp (p_corner1, p_corner2, 1 - p_outerStep);
+		v5 = p_corner2;
+	}
+
 	public static EdgeVertices TerraceLerp(EdgeVertices p_a, EdgeVertices p_b, int step)
 	{
 		EdgeVertices result;

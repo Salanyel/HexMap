@@ -24,7 +24,7 @@ public static class HexMetrics {
 	public const float _solidFactor = 0.82f;
 	public const float _blendFactor = 1 - _solidFactor;
 
-	public const float _cellPerturbStrengh = 3f;
+	public const float _cellPerturbStrengh = 0f;//3f;
 	public const float _cellPerturbElevation = 1.5f;
 	public const float _noiseScale = 0.003f;
 	public static Texture2D _noiseSource;
