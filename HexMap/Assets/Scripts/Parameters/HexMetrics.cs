@@ -109,5 +109,12 @@ public static class HexMetrics {
 		(0.5f * _solidFactor);
 	}
 
+	public static Vector3 Perturb (Vector3 p_position) {
+		Vector4 sample = SampleNoise(p_position);
+		p_position.x += (sample.x * 2f - 1f) * _cellPerturbStrengh;
+		p_position.z += (sample.z * 2f - 1f) * _cellPerturbStrengh;
+		return p_position;
+	}
+
 	#endregion
 }
