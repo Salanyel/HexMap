@@ -116,6 +116,10 @@ public class HexCell : MonoBehaviour {
 		get { return (_elevation + HexMetrics._streamBedElevationOffset) * HexMetrics._elevationStep; }
 	}
 
+	public float RiverSurfaceY {
+		get { return(_elevation + HexMetrics._riverSurfaceElevationOffset) * HexMetrics._elevationStep; }
+	}
+
 	#endregion
 
 	#region Methods

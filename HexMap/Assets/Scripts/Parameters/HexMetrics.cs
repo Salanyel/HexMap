@@ -35,6 +35,7 @@ public static class HexMetrics {
 	public const float _streamBedElevationOffset = -1f;
 	public const float _outerToInner = 0.866025404f;
 	public const float _innerToOuter = 1f / _outerToInner;
+	public const float _riverSurfaceElevationOffset = -0.5f;
 
 	static Vector3[] _corners = {
 		new Vector3 (0f, 0f, _outerRadius),
