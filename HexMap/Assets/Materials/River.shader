@@ -4,13 +4,14 @@
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
+		_riverSpeed ("River speed", Float) = 0.25
 	}
 	SubShader {
-		Tags { "RenderType"="Opaque" }
+		Tags { "RenderType"="Transparent" "Queue"="Transparent"}
 		LOD 200
 		
 		CGPROGRAM
-		#pragma surface surf Standard fullforwardshadows
+		#pragma surface surf Standard alpha
 		#pragma target 3.0
 
 		sampler2D _MainTex;
@@ -22,17 +23,24 @@
 		half _Glossiness;
 		half _Metallic;
 		fixed4 _Color;
+		float _riverSpeed;
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
-			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+			float2 uv = IN.uv_MainTex;
+			uv.x = uv.x * 0.0625 + _Time.y * 0.005;
+			uv.y -= _Time.y * _riverSpeed;
+			float4 noise = tex2D(_MainTex, uv);
+
+			float2 uv2 = IN.uv_MainTex;
+			uv2.x = uv2.x * 0.0625 - _Time.y * 0.0052;
+			uv2.y -= _Time.y * (_riverSpeed - 0.02);
+			float4 noise2 = tex2D(_MainTex, uv2);
+
+			fixed4 c = saturate(_Color + (noise.r * noise2.a));
 			o.Albedo = c.rgb;
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
 			o.Alpha = c.a;
-			if (IN.uv_MainTex.y < 0) {
-				IN.uv_MainTex.y += 1;
-			}
-			o.Albedo.rg = IN.uv_MainTex;
 		}
 		ENDCG
 	}
