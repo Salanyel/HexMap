@@ -13,7 +13,7 @@ public static class HexMetrics {
 	#region Variables
 
 	public const float _outerRadius = 10f;
-	public const float _innerRadius = _outerRadius * 0.866025404f;
+	public const float _innerRadius = _outerRadius * _outerToInner;
 
 	public const float _elevationStep = 3f;
 	public const int _terracesPerSlope = 2;
@@ -24,7 +24,7 @@ public static class HexMetrics {
 	public const float _solidFactor = 0.82f;
 	public const float _blendFactor = 1 - _solidFactor;
 
-	public const float _cellPerturbStrengh = 3f;
+	public const float _cellPerturbStrengh = 4f;
 	public const float _cellPerturbElevation = 1.5f;
 	public const float _noiseScale = 0.003f;
 	public static Texture2D _noiseSource;
@@ -32,6 +32,11 @@ public static class HexMetrics {
 	public const int _chunkSizeX = 5;
 	public const int _chunkSizeZ = 5;
 
+	public const float _streamBedElevationOffset = -1.75f;
+	public const float _outerToInner = 0.866025404f;
+	public const float _innerToOuter = 1f / _outerToInner;
+	public const float _riverSurfaceElevationOffset = -0.5f;
+	 
 	static Vector3[] _corners = {
 		new Vector3 (0f, 0f, _outerRadius),
 		new Vector3 (_innerRadius, 0f, 0.5f * _outerRadius),
@@ -97,6 +102,19 @@ public static class HexMetrics {
 
 	public static Vector4 SampleNoise(Vector3 p_position) {
 		return _noiseSource.GetPixelBilinear (p_position.x * HexMetrics._noiseScale, p_position.z * HexMetrics._noiseScale);
+	}
+
+	public static Vector3 GetSolidEdgeMiddle(ENUM_HexDirection p_direction) {
+		return
+			(_corners [(int)p_direction] + _corners [(int)p_direction + 1]) *
+		(0.5f * _solidFactor);
+	}
+
+	public static Vector3 Perturb (Vector3 p_position) {
+		Vector4 sample = SampleNoise(p_position);
+		p_position.x += (sample.x * 2f - 1f) * _cellPerturbStrengh;
+		p_position.z += (sample.z * 2f - 1f) * _cellPerturbStrengh;
+		return p_position;
 	}
 
 	#endregion

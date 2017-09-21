@@ -15,4 +15,14 @@ public static class ENUM_HexDirectionExtensions {
 	public static ENUM_HexDirection Next(this ENUM_HexDirection p__direction) {
 		return p__direction == ENUM_HexDirection.NW ? ENUM_HexDirection.NE : (p__direction + 1);
 	}
+
+	public static ENUM_HexDirection Previous2 (this ENUM_HexDirection p_direction) {
+		p_direction -= 2;
+		return p_direction >= ENUM_HexDirection.NE ? p_direction : (p_direction + 6);
+	}
+
+	public static ENUM_HexDirection Next2 (this ENUM_HexDirection p_direction) {
+		p_direction += 2;
+		return p_direction <= ENUM_HexDirection.NW ? p_direction : (p_direction - 6);
+	}
 }
