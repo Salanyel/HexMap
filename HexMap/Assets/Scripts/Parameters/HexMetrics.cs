@@ -24,7 +24,7 @@ public static class HexMetrics {
 	public const float _solidFactor = 0.82f;
 	public const float _blendFactor = 1 - _solidFactor;
 
-	public const float _cellPerturbStrengh = 0f;//3f;
+	public const float _cellPerturbStrengh = 4f;
 	public const float _cellPerturbElevation = 1.5f;
 	public const float _noiseScale = 0.003f;
 	public static Texture2D _noiseSource;
@@ -32,11 +32,11 @@ public static class HexMetrics {
 	public const int _chunkSizeX = 5;
 	public const int _chunkSizeZ = 5;
 
-	public const float _streamBedElevationOffset = -1f;
+	public const float _streamBedElevationOffset = -1.75f;
 	public const float _outerToInner = 0.866025404f;
 	public const float _innerToOuter = 1f / _outerToInner;
 	public const float _riverSurfaceElevationOffset = -0.5f;
-
+	 
 	static Vector3[] _corners = {
 		new Vector3 (0f, 0f, _outerRadius),
 		new Vector3 (_innerRadius, 0f, 0.5f * _outerRadius),
