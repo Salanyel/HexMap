@@ -79,6 +79,24 @@ public class HexCell : MonoBehaviour {
 		}
 	}
 
+	int _waterLevel;
+	public int WaterLevel {
+		get { return _waterLevel; }
+		set {
+			if (_waterLevel == value) {
+				return;
+			}
+			_waterLevel = value;
+			Refresh ();
+		}
+	}
+
+
+	bool _isUnderWater;
+	public bool IsUnderWater {
+		get { return _waterLevel > _elevation; }
+	}
+
 	public RectTransform UIRect {
 		get { return _uiRect; }
 		set { _uiRect = value; }
@@ -117,7 +135,11 @@ public class HexCell : MonoBehaviour {
 	}
 
 	public float RiverSurfaceY {
-		get { return(_elevation + HexMetrics._riverSurfaceElevationOffset) * HexMetrics._elevationStep; }
+		get { return(_elevation + HexMetrics._waterElevationOffset) * HexMetrics._elevationStep; }
+	}
+
+	public float WaterSurfaceY {
+		get { return (_waterLevel + HexMetrics._waterElevationOffset) * HexMetrics._elevationStep; }
 	}
 
 	#endregion

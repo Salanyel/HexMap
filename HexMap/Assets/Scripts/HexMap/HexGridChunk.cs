@@ -11,6 +11,9 @@ public class HexGridChunk : MonoBehaviour {
 	[SerializeField]
 	HexMesh _rivers;
 
+	[SerializeField]
+	HexMesh _water;
+
 	HexCell[] _cells;
 	Canvas _gridCanvas;
 
@@ -62,11 +65,13 @@ public class HexGridChunk : MonoBehaviour {
 	public void Triangulate () {
 		_terrain.Clear ();
 		_rivers.Clear ();
+		_water.Clear ();
 		for (int i = 0; i < _cells.Length; i++) {
 			Triangulate(_cells[i]);
 		}
 		_terrain.Apply ();
 		_rivers.Apply ();
+		_water.Apply ();
 	}
 
 	void Triangulate (HexCell cell) {
