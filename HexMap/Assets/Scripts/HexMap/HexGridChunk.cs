@@ -108,6 +108,40 @@ public class HexGridChunk : MonoBehaviour {
 		if (direction <= ENUM_HexDirection.SE) {
 			TriangulateConnection(direction, cell, e);
 		}
+
+		if (cell.IsUnderWater) {
+			TriangulateWater (direction, cell, center);
+		}
+	}
+
+	void TriangulateWater(ENUM_HexDirection p_direction, HexCell p_cell, Vector3 p_center) {
+		p_center.y = p_cell.WaterSurfaceY;
+		Vector3 c1 = p_center + HexMetrics.GetFirstSolidCorner (p_direction);
+		Vector3 c2 = p_center + HexMetrics.GetSecondSolidCorner (p_direction);
+
+		_water.AddTriangle (p_center, c1, c2);
+
+		if (p_direction <= ENUM_HexDirection.SE) {
+			HexCell neighbor = p_cell.GetNeighbor (p_direction);
+			if (neighbor == null || !neighbor.IsUnderWater) {
+				return;
+			}
+
+			Vector3 bridge = HexMetrics.GetBridge (p_direction);
+			Vector3 e1 = c1 + bridge;
+			Vector3 e2 = c2 + bridge;
+
+			_water.AddQuad (c1, c2, e1, e2);
+
+			if (p_direction <= ENUM_HexDirection.E) {
+				HexCell nextNeighbor = p_cell.GetNeighbor (p_direction.Next());
+				if (nextNeighbor == null || !nextNeighbor.IsUnderWater) {
+					return;
+				}
+
+				_water.AddTriangle (c2, e2, c2 + HexMetrics.GetBridge (p_direction.Next()));
+			}
+		}
 	}
 
 	void TriangulateAdjacentToRiver (
