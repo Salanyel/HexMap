@@ -116,16 +116,21 @@ public class HexGridChunk : MonoBehaviour {
 
 	void TriangulateWater(ENUM_HexDirection p_direction, HexCell p_cell, Vector3 p_center) {
 		p_center.y = p_cell.WaterSurfaceY;
+
+		HexCell neighbor = p_cell.GetNeighbor (p_direction);
+
+		if (neighbor != null && !neighbor.IsUnderWater) {
+			TriangulateWaterShore (p_direction, p_cell, neighbor, p_center);
+		} else {
+			TriangulateOpenWater(p_direction, p_cell, neighbor, p_center);
+		}
+
 		Vector3 c1 = p_center + HexMetrics.GetFirstSolidCorner (p_direction);
 		Vector3 c2 = p_center + HexMetrics.GetSecondSolidCorner (p_direction);
 
 		_water.AddTriangle (p_center, c1, c2);
 
-		if (p_direction <= ENUM_HexDirection.SE) {
-			HexCell neighbor = p_cell.GetNeighbor (p_direction);
-			if (neighbor == null || !neighbor.IsUnderWater) {
-				return;
-			}
+		if (p_direction <= ENUM_HexDirection.SE && neighbor != null) {
 
 			Vector3 bridge = HexMetrics.GetBridge (p_direction);
 			Vector3 e1 = c1 + bridge;
@@ -142,6 +147,33 @@ public class HexGridChunk : MonoBehaviour {
 				_water.AddTriangle (c2, e2, c2 + HexMetrics.GetBridge (p_direction.Next()));
 			}
 		}
+	}
+
+	void TriangulateWaterShore(ENUM_HexDirection p_direction, HexCell p_cell, HexCell p_neighbor, Vector3 p_center) {
+		EdgeVertices e1 = new EdgeVertices (
+			                  p_center + HexMetrics.GetFirstCorner (p_direction),
+			                  p_center + HexMetrics.GetSecondSolidCorner (p_direction));
+		_water.AddTriangle (p_center, e1.v1, e1.v2);
+		_water.AddTriangle (p_center, e1.v2, e1.v3);
+		_water.AddTriangle (p_center, e1.v3, e1.v4);
+		_water.AddTriangle (p_center, e1.v4, e1.v5);
+
+		Vector3 bridge = HexMetrics.GetBridge (p_direction);
+		EdgeVertices e2 = new EdgeVertices (e1.v1 + bridge, e1.v5 + bridge);
+
+		_water.AddQuad (e1.v1, e1.v2, e2.v1, e2.v2);
+		_water.AddQuad (e1.v2, e1.v3, e2.v2, e2.v3);
+		_water.AddQuad (e1.v3, e1.v4, e2.v3, e2.v4);
+		_water.AddQuad (e1.v4, e1.v5, e2.v4, e2.v5);
+
+		HexCell nextNeighbor = p_cell.GetNeighbor (p_direction.Next ());
+		if (nextNeighbor != null) {
+			_water.AddTriangle(e1.v5, e2.v5, e1.v5 + HexMetrics.GetBridge(p_direction.Next()));
+		}
+	}
+
+	void TriangulateOpenWater(ENUM_HexDirection p_direction, HexCell p_cell, HexCell p_neighbor, Vector3 p_center) {
+
 	}
 
 	void TriangulateAdjacentToRiver (
