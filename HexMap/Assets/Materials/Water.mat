@@ -25,5 +25,6 @@ Material:
     - _Glossiness: 0.5
     - _Metallic: 0
     - _riverSpeed: 0.25
+    - _waterSpeed: 0.025
     m_Colors:
     - _Color: {r: 0.47794116, g: 0.5463488, b: 1, a: 0.191}
