@@ -4,7 +4,7 @@
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
-		_waterSpeed ("River speed", Float) = 0.025
+		_waterSpeed ("River speed", Float) = 0.25
 	}
 	SubShader {
 		Tags { "RenderType"="Transparent" "Queue"="Transparent"}
@@ -27,25 +27,23 @@
 		float _waterSpeed;
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
-			float2 uv1 = IN.worldPos.xz;
-			uv1.y += _Time.y;
-			float4 noise1 = tex2D(_MainTex, uv1 * _waterSpeed);
+			float shore = IN.uv_MainTex.y;
+			shore = sqrt(shore);
 
-			float2 uv2 = IN.worldPos.xz;
-			uv2.x += _Time.y;
-			float4 noise2 = tex2D(_MainTex, uv2 * _waterSpeed);
+			float2 noiseUV = IN.worldPos.xz + _Time.y * _waterSpeed;
+			float4 noise = tex2D(_MainTex, noiseUV * 0.015);
 
+			float distortion1 = noise.x * (1 - shore);
+			float foam1 = sin((shore + distortion1) * 10 - _Time.y);
+			foam1 *= foam1 * shore;
 
-			float blendWave = sin((IN.worldPos.x + IN.worldPos.z) * 0.1 + (noise1.y + noise2.z) + _Time.y);
+			float distortion2 = noise.y * (1 - shore);
+			float foam2 = sin((shore + distortion2) * 10 - _Time.y + 2);
+			foam2 *= foam2 * shore;
 
-			blendWave *= blendWave;
+			float foam = max(foam1, foam2) * shore;
 
-			float waves = 
-				lerp(noise1.z, noise1.w, blendWave) +
-				lerp(noise2.x, noise2.y, blendWave);
-			waves = smoothstep(0.75, 2, waves);
-
-			fixed4 c = fixed4(IN.uv_MainTex,1,1);
+			fixed4 c = saturate(_Color + foam);
 			o.Albedo = c.rgb;
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;

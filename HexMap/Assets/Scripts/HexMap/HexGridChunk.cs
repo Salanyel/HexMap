@@ -120,7 +120,7 @@ public class HexGridChunk : MonoBehaviour {
 		}
 	}
 
-	void TriangulateWater(ENUM_HexDirection direction, HexCell cell, Vector3 center) {
+	void TriangulateWater (ENUM_HexDirection direction, HexCell cell, Vector3 center) {
 		center.y = cell.WaterSurfaceY;
 
 		HexCell neighbor = cell.GetNeighbor(direction);
@@ -144,6 +144,16 @@ public class HexGridChunk : MonoBehaviour {
 			Vector3 e2 = c2 + bridge;
 
 			_water.AddQuad(c1, c2, e1, e2);
+
+			if (direction <= ENUM_HexDirection.E) {
+				HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
+				if (nextNeighbor == null || !nextNeighbor.IsUnderWater) {
+					return;
+				}
+				_water.AddTriangle(
+					c2, e2, c2 + HexMetrics.GetBridge(direction.Next())
+				);
+			}
 		}
 	}
 
@@ -168,18 +178,21 @@ public class HexGridChunk : MonoBehaviour {
 		_waterShore.AddQuad(e1.v2, e1.v3, e2.v2, e2.v3);
 		_waterShore.AddQuad(e1.v3, e1.v4, e2.v3, e2.v4);
 		_waterShore.AddQuad(e1.v4, e1.v5, e2.v4, e2.v5);
-		_waterShore.AddQuadUV (0f, 0f, 0f, 1f);
-		_waterShore.AddQuadUV (0f, 0f, 0f, 1f);
-		_waterShore.AddQuadUV (0f, 0f, 0f, 1f);
-		_waterShore.AddQuadUV (0f, 0f, 0f, 1f);
+		_waterShore.AddQuadUV(0f, 0f, 0f, 1f);
+		_waterShore.AddQuadUV(0f, 0f, 0f, 1f);
+		_waterShore.AddQuadUV(0f, 0f, 0f, 1f);
+		_waterShore.AddQuadUV(0f, 0f, 0f, 1f);
 
 		HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
 		if (nextNeighbor != null) {
-			_waterShore.AddTriangle(e1.v5, e2.v5, e1.v5 + HexMetrics.GetBridge(direction.Next()));
-			_waterShore.AddTriangleUV (
-				new Vector2 (0f, 0f),
-				new Vector2 (0f, 1f),
-				new Vector2 (0f, nextNeighbor.IsUnderWater? 0f : 1f));
+			_waterShore.AddTriangle(
+				e1.v5, e2.v5, e1.v5 + HexMetrics.GetBridge(direction.Next())
+			);
+			_waterShore.AddTriangleUV(
+				new Vector2(0f, 0f),
+				new Vector2(0f, 1f),
+				new Vector2(0f, nextNeighbor.IsUnderWater ? 0f : 1f)
+			);
 		}
 	}
 
