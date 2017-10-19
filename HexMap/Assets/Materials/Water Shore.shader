@@ -4,7 +4,6 @@
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
-		_waterSpeed ("River speed", Float) = 0.25
 	}
 	SubShader {
 		Tags { "RenderType"="Transparent" "Queue"="Transparent"}
@@ -25,7 +24,6 @@
 		half _Glossiness;
 		half _Metallic;
 		fixed4 _Color;
-		float _waterSpeed;
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
 			float shore = IN.uv_MainTex.y;

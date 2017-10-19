@@ -24,6 +24,7 @@ Material:
     m_Floats:
     - _Glossiness: 0.5
     - _Metallic: 0
+    - _ShoreScaling: -16.05
     - _waterSpeed: 0.025
     m_Colors:
     - _Color: {r: 0.47843137, g: 0.54509807, b: 1, a: 0.19215687}
