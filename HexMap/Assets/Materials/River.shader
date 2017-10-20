@@ -7,7 +7,7 @@
 		_riverSpeed ("River speed", Float) = 0.25
 	}
 	SubShader {
-		Tags { "RenderType"="Transparent" "Queue"="Transparent"}
+		Tags { "RenderType"="Transparent" "Queue"="Transparent+1"}
 		LOD 200
 		
 		CGPROGRAM
