@@ -66,14 +66,7 @@ public class HexCell : MonoBehaviour {
 			uiPosition.z = -position.y;
 			_uiRect.localPosition = uiPosition;
 
-			//Manage the rivers behaviour
-			if (_hasOutgoingRiver && _elevation < GetNeighbor (_outgoingRiver)._elevation) {
-				RemoveOutgoingRiver ();
-			}
-
-			if (_hasIncomingRiver && _elevation > GetNeighbor (_incomingRiver)._elevation) {
-				RemoveIncomingRiver ();
-			}
+			ValidateRivers ();
 
 			Refresh ();
 		}
@@ -87,6 +80,7 @@ public class HexCell : MonoBehaviour {
 				return;
 			}
 			_waterLevel = value;
+			ValidateRivers ();
 			Refresh ();
 		}
 	}
@@ -146,6 +140,10 @@ public class HexCell : MonoBehaviour {
 
 	#region Methods
 
+	bool IsValidRiverDestination(HexCell p_neighbor) {
+		return p_neighbor && (_elevation >= p_neighbor._elevation || _waterLevel == p_neighbor._elevation);
+	}
+
 	public bool HasRiverThroughEdge(ENUM_HexDirection p_direction) {
 		return
 			_hasIncomingRiver && _incomingRiver == p_direction ||
@@ -167,6 +165,16 @@ public class HexCell : MonoBehaviour {
 
 	public ENUM_HexEdgeType GetEdgeType(HexCell p_cell) {
 		return HexMetrics.GetEdgeType (_elevation, p_cell.Elevation);
+	}
+
+	void ValidateRivers() {
+		if (_hasOutgoingRiver && !IsValidRiverDestination(GetNeighbor(_outgoingRiver))) {
+			RemoveOutgoingRiver();
+		}
+
+		if (_hasIncomingRiver && !GetNeighbor (_incomingRiver).IsValidRiverDestination (this)) {
+			RemoveIncomingRiver ();
+		}
 	}
 
 	public void RemoveRiver() {
@@ -206,7 +214,7 @@ public class HexCell : MonoBehaviour {
 		}
 
 		HexCell neighbor = GetNeighbor (p_direction);
-		if (!neighbor || _elevation < neighbor.Elevation) {
+		if (!IsValidRiverDestination(neighbor)) {
 			return;
 		}
 

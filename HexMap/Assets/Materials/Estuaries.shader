@@ -4,15 +4,15 @@
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
-		_RiverSpeed("River speed", Float) = 0.25
 	}
 	SubShader {
-		Tags { "RenderType"="Transparent" "Queue"="Transparent"}
+		Tags { "RenderType"="Transparent" "Queue"="Transparent" }
 		LOD 200
 		
 		CGPROGRAM
 		#pragma surface surf Standard alpha vertex:vert
 		#pragma target 3.0
+
 		#include "Water.cginc"
 
 		sampler2D _MainTex;
@@ -26,9 +26,8 @@
 		half _Glossiness;
 		half _Metallic;
 		fixed4 _Color;
-		float _riverSpeed;
 
-		void vert(inout appdata_full v, out Input o) {
+		void vert (inout appdata_full v, out Input o) {
 			UNITY_INITIALIZE_OUTPUT(Input, o);
 			o.riverUV = v.texcoord1.xy;
 		}
@@ -38,14 +37,11 @@
 			float foam = Foam(shore, IN.worldPos.xz, _MainTex);
 			float waves = Waves(IN.worldPos.xz, _MainTex);
 			waves *= 1 - shore;
-
 			float shoreWater = max(foam, waves);
 
-			float river = River(IN.riverUV, _MainTex, _riverSpeed);
+			float river = River(IN.riverUV, _MainTex, 0.25f);
 
 			float water = lerp(shoreWater, river, IN.uv_MainTex.x);
-
-
 
 			fixed4 c = saturate(_Color + water);
 			o.Albedo = c.rgb;

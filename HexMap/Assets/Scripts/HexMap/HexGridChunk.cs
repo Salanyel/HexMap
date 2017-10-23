@@ -180,7 +180,7 @@ public class HexGridChunk : MonoBehaviour {
 		);
 
 		if (cell.HasRiverThroughEdge (direction)) {
-			TriangulateEstuary (e1, e2);
+			TriangulateEstuary (e1, e2, cell.IncomingRiver == direction);
 		} else {
 			_waterShore.AddQuad (e1.v1, e1.v2, e2.v1, e2.v2);
 			_waterShore.AddQuad (e1.v2, e1.v3, e2.v2, e2.v3);
@@ -207,7 +207,9 @@ public class HexGridChunk : MonoBehaviour {
 		}
 	}
 
-	void TriangulateEstuary(EdgeVertices e1, EdgeVertices e2) {
+	void TriangulateEstuary (
+		EdgeVertices e1, EdgeVertices e2, bool incomingRiver
+	) {
 		_waterShore.AddTriangle(e2.v1, e1.v2, e1.v1);
 		_waterShore.AddTriangle(e2.v5, e1.v5, e1.v4);
 		_waterShore.AddTriangleUV(
@@ -233,19 +235,36 @@ public class HexGridChunk : MonoBehaviour {
 			new Vector2(1f, 1f), new Vector2(0f, 1f)
 		);
 
-		_estuaries.AddQuadUV2(
-			new Vector2(1.5f, 1f), new Vector2(0.7f, 1.15f),
-			new Vector2(1f, 0.8f), new Vector2(0.5f, 1.1f)
-		);
-		_estuaries.AddTriangleUV2(
-			new Vector2(0.5f, 1.1f),
-			new Vector2(1f, 0.8f),
-			new Vector2(0f, 0.8f)
-		);
-		_estuaries.AddQuadUV2(
-			new Vector2(0.5f, 1.1f), new Vector2(0.3f, 1.15f),
-			new Vector2(0f, 0.8f), new Vector2(-0.5f, 1f)
-		);
+		if (incomingRiver) {
+			_estuaries.AddQuadUV2(
+				new Vector2(1.5f, 1f), new Vector2(0.7f, 1.15f),
+				new Vector2(1f, 0.8f), new Vector2(0.5f, 1.1f)
+			);
+			_estuaries.AddTriangleUV2(
+				new Vector2(0.5f, 1.1f),
+				new Vector2(1f, 0.8f),
+				new Vector2(0f, 0.8f)
+			);
+			_estuaries.AddQuadUV2(
+				new Vector2(0.5f, 1.1f), new Vector2(0.3f, 1.15f),
+				new Vector2(0f, 0.8f), new Vector2(-0.5f, 1f)
+			);
+		}
+		else {
+			_estuaries.AddQuadUV2(
+				new Vector2(-0.5f, -0.2f), new Vector2(0.3f, -0.35f),
+				new Vector2(0f, 0f), new Vector2(0.5f, -0.3f)
+			);
+			_estuaries.AddTriangleUV2(
+				new Vector2(0.5f, -0.3f),
+				new Vector2(0f, 0f),
+				new Vector2(1f, 0f)
+			);
+			_estuaries.AddQuadUV2(
+				new Vector2(0.5f, -0.3f), new Vector2(0.7f, -0.35f),
+				new Vector2(1f, 0f), new Vector2(1.5f, -0.2f)
+			);
+		}
 	}
 
 	void TriangulateWaterfallInWater(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, float y1, float y2, float waterY) {
