@@ -24,6 +24,8 @@ public static class HexMetrics {
 	public const float _solidFactor = 0.82f;
 	public const float _blendFactor = 1 - _solidFactor;
 
+	public const float _waterFactor = 0.6f;
+	public const float _waterBlendFactor = 1f - _waterFactor;
 	public const float _cellPerturbStrengh = 4f;
 	public const float _cellPerturbElevation = 1.5f;
 	public const float _noiseScale = 0.003f;
@@ -35,7 +37,7 @@ public static class HexMetrics {
 	public const float _streamBedElevationOffset = -1.75f;
 	public const float _outerToInner = 0.866025404f;
 	public const float _innerToOuter = 1f / _outerToInner;
-	public const float _riverSurfaceElevationOffset = -0.5f;
+	public const float _waterElevationOffset = -0.5f;
 	 
 	static Vector3[] _corners = {
 		new Vector3 (0f, 0f, _outerRadius),
@@ -67,8 +69,19 @@ public static class HexMetrics {
 		return _corners [(int)p__direction + 1] * _solidFactor;
 	}
 
+	public static Vector3 GetFirstWaterCorner(ENUM_HexDirection p_direction) {
+		return _corners [(int)p_direction] * _waterFactor;
+	}
+	public static Vector3 GetSecondWaterCorner(ENUM_HexDirection p_direction) {
+		return _corners [(int)p_direction + 1] * _waterFactor;
+	}
+
 	public static Vector3 GetBridge(ENUM_HexDirection p__direction) {
 		return (_corners[(int)p__direction] + _corners[(int) p__direction + 1]) * _blendFactor;
+	}
+
+	public static Vector3 GetWaterBridge (ENUM_HexDirection p_direction) {
+		return (_corners [(int)p_direction] + _corners [(int)p_direction + 1]) * _waterBlendFactor;
 	}
 
 	public static Vector3 TerraceLerp(Vector3 p_a, Vector3 p_b, int p_step) {

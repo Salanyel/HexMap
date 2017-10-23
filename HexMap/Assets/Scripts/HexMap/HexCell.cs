@@ -66,17 +66,29 @@ public class HexCell : MonoBehaviour {
 			uiPosition.z = -position.y;
 			_uiRect.localPosition = uiPosition;
 
-			//Manage the rivers behaviour
-			if (_hasOutgoingRiver && _elevation < GetNeighbor (_outgoingRiver)._elevation) {
-				RemoveOutgoingRiver ();
-			}
-
-			if (_hasIncomingRiver && _elevation > GetNeighbor (_incomingRiver)._elevation) {
-				RemoveIncomingRiver ();
-			}
+			ValidateRivers ();
 
 			Refresh ();
 		}
+	}
+
+	int _waterLevel;
+	public int WaterLevel {
+		get { return _waterLevel; }
+		set {
+			if (_waterLevel == value) {
+				return;
+			}
+			_waterLevel = value;
+			ValidateRivers ();
+			Refresh ();
+		}
+	}
+
+
+	bool _isUnderWater;
+	public bool IsUnderWater {
+		get { return _waterLevel > _elevation; }
 	}
 
 	public RectTransform UIRect {
@@ -117,12 +129,20 @@ public class HexCell : MonoBehaviour {
 	}
 
 	public float RiverSurfaceY {
-		get { return(_elevation + HexMetrics._riverSurfaceElevationOffset) * HexMetrics._elevationStep; }
+		get { return(_elevation + HexMetrics._waterElevationOffset) * HexMetrics._elevationStep; }
+	}
+
+	public float WaterSurfaceY {
+		get { return (_waterLevel + HexMetrics._waterElevationOffset) * HexMetrics._elevationStep; }
 	}
 
 	#endregion
 
 	#region Methods
+
+	bool IsValidRiverDestination(HexCell p_neighbor) {
+		return p_neighbor && (_elevation >= p_neighbor._elevation || _waterLevel == p_neighbor._elevation);
+	}
 
 	public bool HasRiverThroughEdge(ENUM_HexDirection p_direction) {
 		return
@@ -145,6 +165,16 @@ public class HexCell : MonoBehaviour {
 
 	public ENUM_HexEdgeType GetEdgeType(HexCell p_cell) {
 		return HexMetrics.GetEdgeType (_elevation, p_cell.Elevation);
+	}
+
+	void ValidateRivers() {
+		if (_hasOutgoingRiver && !IsValidRiverDestination(GetNeighbor(_outgoingRiver))) {
+			RemoveOutgoingRiver();
+		}
+
+		if (_hasIncomingRiver && !GetNeighbor (_incomingRiver).IsValidRiverDestination (this)) {
+			RemoveIncomingRiver ();
+		}
 	}
 
 	public void RemoveRiver() {
@@ -184,7 +214,7 @@ public class HexCell : MonoBehaviour {
 		}
 
 		HexCell neighbor = GetNeighbor (p_direction);
-		if (!neighbor || _elevation < neighbor.Elevation) {
+		if (!IsValidRiverDestination(neighbor)) {
 			return;
 		}
 
