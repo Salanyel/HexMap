@@ -101,7 +101,9 @@ public class HexGridChunk : MonoBehaviour {
 			Triangulate(d, cell);
 		}
 
-		_features.AddFeature (cell.Position);
+		if (!cell.IsUnderWater && !cell.HasRiver) {
+			_features.AddFeature (cell.Position);
+		}
 
 	}
 
@@ -128,6 +130,10 @@ public class HexGridChunk : MonoBehaviour {
 		}
 		else {
 			TriangulateEdgeFan(center, e, cell.Color);
+
+			if (!cell.IsUnderWater) {
+				_features.AddFeature ((center + e.v1 + e.v5) * (1f / 3f));
+			}
 		}
 
 		if (direction <= ENUM_HexDirection.SE) {
@@ -325,6 +331,10 @@ public class HexGridChunk : MonoBehaviour {
 
 		TriangulateEdgeStrip(m, cell.Color, e, cell.Color);
 		TriangulateEdgeFan(center, m, cell.Color);
+
+		if (!cell.IsUnderWater) {
+			_features.AddFeature ((center + e.v1 + e.v5) * (1f / 3f));
+		}
 	}
 
 	void TriangulateWithRiverBeginOrEnd (ENUM_HexDirection direction, HexCell cell, Vector3 center, EdgeVertices e) {
