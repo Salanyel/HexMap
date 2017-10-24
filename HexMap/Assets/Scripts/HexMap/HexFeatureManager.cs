@@ -24,9 +24,17 @@ public class HexFeatureManager : MonoBehaviour {
 	public void Apply() { }
 
 	public void AddFeature(Vector3 p_position) {
+		HexHash hash = HexMetrics.SampleHasGrid (p_position);
+
+		//Percentage density for the features
+		if (hash._a > +0.5f) {
+			return;
+		}
+
 		Transform instance = Instantiate (_featurePrefab);
 		p_position.y = instance.localScale.y * 0.5f;
 		instance.localPosition = HexMetrics.Perturb(p_position);
+		instance.localRotation = Quaternion.Euler (0f, 360f * hash._b, 0f);
 		instance.SetParent (_container, false);
 	}
 

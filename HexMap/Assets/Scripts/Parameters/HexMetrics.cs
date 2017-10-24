@@ -39,6 +39,9 @@ public static class HexMetrics {
 	public const float _innerToOuter = 1f / _outerToInner;
 	public const float _waterElevationOffset = -0.5f;
 	 
+	public const int _hashGridSize = 256;
+	public const float _hashGridScale = 0.25f;
+
 	static Vector3[] _corners = {
 		new Vector3 (0f, 0f, _outerRadius),
 		new Vector3 (_innerRadius, 0f, 0.5f * _outerRadius),
@@ -48,6 +51,8 @@ public static class HexMetrics {
 		new Vector3 (-_innerRadius, 0f, 0.5f * _outerRadius),
 		new Vector3 (0f, 0f, _outerRadius),
 	};
+
+	static HexHash[] _hashGrid;
 
 	#endregion
 
@@ -128,6 +133,32 @@ public static class HexMetrics {
 		p_position.x += (sample.x * 2f - 1f) * _cellPerturbStrengh;
 		p_position.z += (sample.z * 2f - 1f) * _cellPerturbStrengh;
 		return p_position;
+	}
+
+	public static void InitializeHasGrid(int p_seed) {
+		_hashGrid = new HexHash[_hashGridSize * _hashGridSize];
+
+		Random.State currentState = Random.state;
+		Random.InitState (p_seed);
+
+		for (int i = 0; i < _hashGrid.Length; ++i) {
+			_hashGrid [i] = HexHash.Create();
+		}
+		Random.state = currentState;
+	}
+
+	public static HexHash SampleHasGrid(Vector3 p_position) {
+		int x = (int)(p_position.x * _hashGridScale) % _hashGridSize;
+		if (x < 0) {
+			x += _hashGridSize;
+		}
+
+		int z = (int)(p_position.z * _hashGridScale) % _hashGridSize;
+		if (z < 0) {
+			z += _hashGridSize;
+		}
+
+		return _hashGrid [x + z * _hashGridSize];
 	}
 
 	#endregion
