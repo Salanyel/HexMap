@@ -85,6 +85,17 @@ public class HexCell : MonoBehaviour {
 		}
 	}
 
+	int _urbanLevel;
+	public int UrbanLevel {
+		get { return _urbanLevel; }
+		set {
+			if (_urbanLevel != value) {
+				_urbanLevel = value;
+				RefreshSelfOnly ();
+			}
+		}
+	}
+
 
 	bool _isUnderWater;
 	public bool IsUnderWater {

@@ -23,11 +23,11 @@ public class HexFeatureManager : MonoBehaviour {
 
 	public void Apply() { }
 
-	public void AddFeature(Vector3 p_position) {
+	public void AddFeature(HexCell p_cell, Vector3 p_position) {
 		HexHash hash = HexMetrics.SampleHasGrid (p_position);
 
 		//Percentage density for the features
-		if (hash._a > +0.5f) {
+		if (hash._a > p_cell.UrbanLevel * 0.25f) {
 			return;
 		}
 

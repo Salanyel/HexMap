@@ -16,11 +16,16 @@ public class HexMapEditor : MonoBehaviour {
 
 	HexGrid _hexGrid;
 	Color _activeColor;
+
 	int _activeElevation;
 	int _activeWaterLevel;
+	int _activeUrbanLevel;
+
 	bool _canApplyColor;
 	bool _canApplyElevation = true;
 	bool _canApplyWaterLevel = true;
+	bool _canApplyUrbanLevel = false;
+
 	int _brushSize = 0;
 	ENUM_OptionalToggle _riverMode;
 
@@ -82,13 +87,15 @@ public class HexMapEditor : MonoBehaviour {
 				p_cell.WaterLevel = _activeWaterLevel;
 			}
 
+			if (_canApplyUrbanLevel) {
+				p_cell.UrbanLevel = _activeUrbanLevel;
+			}
+
 			if (_riverMode == ENUM_OptionalToggle.No) {
 				p_cell.RemoveRiver ();
 			} else if (_isDrag && _riverMode == ENUM_OptionalToggle.Yes) {
 				HexCell otherCell = p_cell.GetNeighbor (_dragDirection.Opposite ());
 				if (otherCell) {
-//					Debug.Log ("--- Outgoing river from " + _previousCell, _previousCell);
-//					Debug.Log (" to " + otherCell + " ---", otherCell);
 					_previousCell.SetOutgoingRiver (_dragDirection);
 				}
 			}
@@ -138,12 +145,20 @@ public class HexMapEditor : MonoBehaviour {
 		_activeElevation = (int) p_elevation;
 	}
 
+	public void SetUrbanLevel(float p_urbanLevel) {
+		_activeUrbanLevel = (int)p_urbanLevel;
+	}
+
 	public void SetCanApplyElevation(bool p_can) {
 		_canApplyElevation = p_can;
 	}
 
 	public void SetCanApplyWaterLevel(bool p_can) {
 		_canApplyWaterLevel = p_can;
+	}
+
+	public void SetCanApplyUrbanLevel(bool p_can) {
+		_canApplyUrbanLevel = p_can;
 	}
 
 	public void SetBrushSize(float p_size) {

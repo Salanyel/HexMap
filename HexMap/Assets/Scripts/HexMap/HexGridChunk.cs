@@ -102,7 +102,7 @@ public class HexGridChunk : MonoBehaviour {
 		}
 
 		if (!cell.IsUnderWater && !cell.HasRiver) {
-			_features.AddFeature (cell.Position);
+			_features.AddFeature (cell, cell.Position);
 		}
 
 	}
@@ -132,7 +132,7 @@ public class HexGridChunk : MonoBehaviour {
 			TriangulateEdgeFan(center, e, cell.Color);
 
 			if (!cell.IsUnderWater) {
-				_features.AddFeature ((center + e.v1 + e.v5) * (1f / 3f));
+				_features.AddFeature (cell, (center + e.v1 + e.v5) * (1f / 3f));
 			}
 		}
 
@@ -333,7 +333,7 @@ public class HexGridChunk : MonoBehaviour {
 		TriangulateEdgeFan(center, m, cell.Color);
 
 		if (!cell.IsUnderWater) {
-			_features.AddFeature ((center + e.v1 + e.v5) * (1f / 3f));
+			_features.AddFeature (cell, (center + e.v1 + e.v5) * (1f / 3f));
 		}
 	}
 
