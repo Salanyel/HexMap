@@ -1,14 +1,15 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Materials/Estuaries.shader">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Parameters/HexMetrics.cs">
     <Files>
-      <File FileName="Assets/Scripts/HexMap/HexCell.cs" Line="147" Column="2" />
+      <File FileName="Assets/Scripts/HexMap/HexFeatureManager.cs" Line="27" Column="10" />
+      <File FileName="Assets/Scripts/HexMap/HexCell.cs" Line="1" Column="1" />
       <File FileName="Assets/Materials/River.shader" Line="1" Column="1" />
       <File FileName="Assets/Materials/Water Shore.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/HexMap/HexGridChunk.cs" Line="247" Column="6" />
+      <File FileName="Assets/Scripts/HexMap/HexGridChunk.cs" Line="1" Column="1" />
       <File FileName="Assets/Materials/Water.shader" Line="1" Column="1" />
       <File FileName="Assets/Scripts/HexMap/HexMesh.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Parameters/HexMetrics.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Parameters/HexMetrics.cs" Line="135" Column="21" />
       <File FileName="Assets/Scripts/Parameters/HexDirectionExtensions.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Input/HexMapCamera.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/HexMap/HexCoordinates.cs" Line="1" Column="1" />
@@ -17,29 +18,10 @@
       <File FileName="Assets/Scripts/HexMap/HexGrid.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/HexMap/EdgeVertices.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Architectures/ListPool.cs" Line="1" Column="1" />
-      <File FileName="Assets/Materials/Water.cginc" Line="21" Column="30" />
-      <File FileName="Assets/Materials/Estuaries.shader" Line="42" Column="51" />
-      <File FileName="Assets/Scripts/ABC.cs" Line="27" Column="20" />
+      <File FileName="Assets/Materials/Water.cginc" Line="1" Column="1" />
+      <File FileName="Assets/Materials/Estuaries.shader" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Parameters/HexHash.cs" Line="1" Column="1" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="HexMap" expanded="True">
-            <Node name="Assembly-CSharp" expanded="True">
-              <Node name="Materials" expanded="True">
-                <Node name="Estuaries.shader" selected="True" />
-              </Node>
-            </Node>
-            <Node name="Assembly-CSharp-Editor" expanded="True" />
-          </Node>
-        </State>
-      </Pad>
-      <Pad Id="MonoDevelop.NUnit.TestPad">
-        <State name="__root__">
-          <Node name="HexMap" expanded="True" selected="True" />
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

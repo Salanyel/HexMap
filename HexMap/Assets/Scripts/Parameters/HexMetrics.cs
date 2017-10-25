@@ -42,6 +42,12 @@ public static class HexMetrics {
 	public const int _hashGridSize = 256;
 	public const float _hashGridScale = 0.25f;
 
+	static float[][] _featureThresholds = {
+		new float[] { 0.0f, 0.0f, 0.4f },
+		new float[] { 0.0f, 0.4f, 0.6f },
+		new float[] { 0.4f, 0.6f, 0.8f }
+	};
+		
 	static Vector3[] _corners = {
 		new Vector3 (0f, 0f, _outerRadius),
 		new Vector3 (_innerRadius, 0f, 0.5f * _outerRadius),
@@ -159,6 +165,10 @@ public static class HexMetrics {
 		}
 
 		return _hashGrid [x + z * _hashGridSize];
+	}
+
+	public static float[] GetFeatureThresholds(int p_level) {
+		return _featureThresholds[p_level];
 	}
 
 	#endregion
