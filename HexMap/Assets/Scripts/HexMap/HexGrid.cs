@@ -26,6 +26,9 @@ public class HexGrid : MonoBehaviour {
 	[SerializeField]
 	Texture2D _noiseSource;
 
+	[SerializeField]
+	int p_seed;
+
 	int _cellCountX;
 	int _cellCountZ;
 
@@ -54,12 +57,20 @@ public class HexGrid : MonoBehaviour {
 
 	void Awake() {
 		HexMetrics._noiseSource = _noiseSource;
+		HexMetrics.InitializeHasGrid(p_seed);
 
 		_cellCountX = _chunkCountX * HexMetrics._chunkSizeX;
 		_cellCountZ = _chunkCountZ * HexMetrics._chunkSizeZ;
 
 		CreateChunks ();
 		CreateCells ();
+	}
+
+	void OnEnable() {
+		if (!HexMetrics._noiseSource) {
+			HexMetrics._noiseSource = _noiseSource;
+			HexMetrics.InitializeHasGrid (p_seed);
+		}
 	}
 
 	#endregion
