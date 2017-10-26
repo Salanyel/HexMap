@@ -153,7 +153,7 @@ public static class HexMetrics {
 		Random.state = currentState;
 	}
 
-	public static HexHash SampleHasGrid(Vector3 p_position) {
+	public static HexHash SampleHashGrid(Vector3 p_position) {
 		int x = (int)(p_position.x * _hashGridScale) % _hashGridSize;
 		if (x < 0) {
 			x += _hashGridSize;
