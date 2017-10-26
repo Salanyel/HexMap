@@ -96,6 +96,25 @@ public class HexCell : MonoBehaviour {
 		}
 	}
 
+	int _farmLevel;
+	public int FarmLevel {
+		get { return _farmLevel; }
+		set { if (_farmLevel != value) {
+				_farmLevel = value;
+				RefreshSelfOnly();
+			}
+		}
+	}
+
+	int _plantLevel;
+	public int PlantLevel {
+		get { return _plantLevel; }
+		set { if (_plantLevel != value) {
+				_plantLevel = value;
+				RefreshSelfOnly();
+			}
+		}
+	}
 
 	bool _isUnderWater;
 	public bool IsUnderWater {

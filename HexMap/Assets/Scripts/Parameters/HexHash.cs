@@ -4,7 +4,7 @@ public struct HexHash {
 
 	#region Variables
 
-	public float _a, _b, _c;
+	public float _a, _b, _c, _d, _e;
 
 	#endregion
 
@@ -15,6 +15,8 @@ public struct HexHash {
 		hash._a = Random.value * 0.999f;
 		hash._b = Random.value * 0.999f;
 		hash._c = Random.value * 0.999f;
+		hash._d = Random.value * 0.999f;
+		hash._e = Random.value * 0.999f;
 
 		return hash;
 	}

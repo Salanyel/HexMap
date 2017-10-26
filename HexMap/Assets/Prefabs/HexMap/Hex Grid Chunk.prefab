@@ -526,6 +526,26 @@ MonoBehaviour:
   - _prefabs:
     - {fileID: 4433172009866964, guid: cedb6ada156db4c3280ebbec18c633e2, type: 2}
     - {fileID: 4433172009866964, guid: 3de46ca146e6d4be3bf1a12be8a4e590, type: 2}
+  _farmCollections:
+  - _prefabs:
+    - {fileID: 4433172009866964, guid: 7c590fca8731e484f99c8610c70c3d7a, type: 2}
+    - {fileID: 4433172009866964, guid: 57291095571e942ad8c4bd1702ccfa67, type: 2}
+  - _prefabs:
+    - {fileID: 4433172009866964, guid: ecbd52f6449a241a1bb4566aa6e137c9, type: 2}
+    - {fileID: 4433172009866964, guid: 6888bd7cb3dc34e18a9d18f2a4815383, type: 2}
+  - _prefabs:
+    - {fileID: 4433172009866964, guid: f1bdee076206d4ab18b48d4deee014a0, type: 2}
+    - {fileID: 4433172009866964, guid: 0b59d57975434458a9fbd685289101f8, type: 2}
+  _plantCollections:
+  - _prefabs:
+    - {fileID: 4433172009866964, guid: 9fd2fef3f43b3495f84904fa1a139d88, type: 2}
+    - {fileID: 4433172009866964, guid: 7e33291a6ee3b422b8e9755258a20a1e, type: 2}
+  - _prefabs:
+    - {fileID: 4433172009866964, guid: f92301749417a4574805a515ca098785, type: 2}
+    - {fileID: 4433172009866964, guid: 621335b66c58342549ebcabbf4ac31ed, type: 2}
+  - _prefabs:
+    - {fileID: 4433172009866964, guid: f853657fd00e44d63b3f20e56598d550, type: 2}
+    - {fileID: 4433172009866964, guid: 3e1b0d398c51f4df08f04e63f8777a4a, type: 2}
 --- !u!114 &114929279513397202
 MonoBehaviour:
   m_ObjectHideFlags: 1
