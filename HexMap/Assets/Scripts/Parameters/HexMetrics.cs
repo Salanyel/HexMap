@@ -31,6 +31,9 @@ public static class HexMetrics {
 	public const float _noiseScale = 0.003f;
 	public static Texture2D _noiseSource;
 
+	public const float _wallHeight = 3f;
+	public const float _wallThickness = 0.75f;
+
 	public const int _chunkSizeX = 5;
 	public const int _chunkSizeZ = 5;
 
@@ -169,6 +172,14 @@ public static class HexMetrics {
 
 	public static float[] GetFeatureThresholds(int p_level) {
 		return _featureThresholds[p_level];
+	}
+
+	public static Vector3 wallThicknessOffset(Vector3 p_near, Vector3 p_far) {
+		Vector3 offset;
+		offset.x = p_far.x - p_near.x;
+		offset.y = 0f;
+		offset.z = p_far.z - p_near.z;
+		return offset.normalized * (_wallThickness * 0.5f);
 	}
 
 	#endregion
