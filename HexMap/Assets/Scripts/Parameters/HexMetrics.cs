@@ -33,6 +33,7 @@ public static class HexMetrics {
 
 	public const float _wallHeight = 3f;
 	public const float _wallThickness = 0.75f;
+	public const float _wallElevationOffset = _verticalTerraceStepSize;
 
 	public const int _chunkSizeX = 5;
 	public const int _chunkSizeZ = 5;
@@ -180,6 +181,16 @@ public static class HexMetrics {
 		offset.y = 0f;
 		offset.z = p_far.z - p_near.z;
 		return offset.normalized * (_wallThickness * 0.5f);
+	}
+
+	public static Vector3 WallLerp(Vector3 p_near, Vector3 p_far) {
+		p_near.x += (p_far.x - p_near.x) * 0.5f;
+		p_near.z += (p_far.z - p_near.z) * 0.5f;
+
+		float v = p_near.y < p_far.y ? _wallElevationOffset : (1f - _wallElevationOffset);
+		p_near.y += (p_far.y - p_near.y) * v;
+
+		return p_near;
 	}
 
 	#endregion

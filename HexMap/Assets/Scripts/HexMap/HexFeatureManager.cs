@@ -94,7 +94,10 @@ public class HexFeatureManager : MonoBehaviour {
 
 	public void AddWall(EdgeVertices p_near, HexCell p_nearCell, EdgeVertices p_far, HexCell p_farCell) {
 		if (p_nearCell.Walled != p_farCell.Walled) {
-			AddWallSegment (p_near.v1, p_far.v1, p_near.v5, p_far.v5);
+			AddWallSegment (p_near.v1, p_far.v1, p_near.v2, p_far.v2);
+			AddWallSegment (p_near.v2, p_far.v2, p_near.v3, p_far.v3);
+			AddWallSegment (p_near.v3, p_far.v3, p_near.v4, p_far.v4);
+			AddWallSegment (p_near.v4, p_far.v4, p_near.v5, p_far.v5);
 		}
 	}
 
@@ -122,8 +125,13 @@ public class HexFeatureManager : MonoBehaviour {
 
 	void AddWallSegment(Vector3 p_nearLeft, Vector3 p_farLeft, Vector3 p_nearRight, Vector3 p_farRight) {
 		Vector3 v1, v2, v3, v4;
-		Vector3 left = Vector3.Lerp (p_nearLeft, p_farLeft, 0.5f);
-		Vector3 right = Vector3.Lerp (p_nearRight, p_farRight, 0.5f);
+		p_nearLeft = HexMetrics.Perturb (p_nearLeft);
+		p_farLeft = HexMetrics.Perturb (p_farLeft);
+		p_nearRight = HexMetrics.Perturb (p_nearRight);
+		p_farRight = HexMetrics.Perturb (p_farRight);
+
+		Vector3 left = HexMetrics.WallLerp (p_nearLeft, p_farLeft);
+		Vector3 right = HexMetrics.WallLerp (p_nearRight, p_farRight);
 
 		Vector3 leftThicknessOffset = HexMetrics.wallThicknessOffset (p_nearLeft, p_farLeft);
 		Vector3 rightThicknessOffset = HexMetrics.wallThicknessOffset (p_nearRight, p_farRight);
@@ -135,7 +143,7 @@ public class HexFeatureManager : MonoBehaviour {
 		v2 = v4 = right - rightThicknessOffset;
 		v3.y = leftTop;
 		v4.y = rightTop;
-		_walls.AddQuad(v1, v2, v3, v4);
+		_walls.AddQuadUnperturbed(v1, v2, v3, v4);
 
 		Vector3 t1 = v3, t2 = v4;
 
@@ -143,9 +151,9 @@ public class HexFeatureManager : MonoBehaviour {
 		v2 = v4 = right + rightThicknessOffset;
 		v3.y = leftTop;
 		v4.y = rightTop;
-		_walls.AddQuad(v2, v1, v4, v3);
+		_walls.AddQuadUnperturbed(v2, v1, v4, v3);
 
-		_walls.AddQuad(t1, t2, v3, v4);
+		_walls.AddQuadUnperturbed(t1, t2, v3, v4);
 	}
 
 	void AddWallSegment(Vector3 p_pivot, HexCell p_pivotCell, Vector3 p_left, HexCell p_leftCell, Vector3 p_right, HexCell p_rightCell) {
