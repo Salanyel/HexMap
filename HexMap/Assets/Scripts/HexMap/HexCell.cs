@@ -121,6 +121,16 @@ public class HexCell : MonoBehaviour {
 		get { return _waterLevel > _elevation; }
 	}
 
+	bool _isWalled;
+	public bool Walled {
+		get { return _isWalled; }
+		set { if (_isWalled != value) {
+				_isWalled = value;
+				Refresh ();
+			}
+		}
+	}
+
 	public RectTransform UIRect {
 		get { return _uiRect; }
 		set { _uiRect = value; }

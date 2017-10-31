@@ -431,7 +431,9 @@ public class HexGridChunk : MonoBehaviour {
 			e1.v5 + bridge
 		);
 
-		if (cell.HasRiverThroughEdge (direction)) {
+		bool hasRiver = cell.HasRiverThroughEdge (direction);
+
+		if (hasRiver) {
 			e2.v3.y = neighbor.StreamBedY;
 
 			if (!cell.IsUnderWater) {
@@ -457,6 +459,8 @@ public class HexGridChunk : MonoBehaviour {
 		else {
 			TriangulateEdgeStrip(e1, cell.Color, e2, neighbor.Color);
 		}
+
+		_features.AddWall (e1, cell, e2, neighbor, hasRiver);
 
 		HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
 		if (direction <= ENUM_HexDirection.E && nextNeighbor != null) {
@@ -541,6 +545,8 @@ public class HexGridChunk : MonoBehaviour {
 			_terrain.AddTriangle(bottom, left, right);
 			_terrain.AddTriangleColor(bottomCell.Color, leftCell.Color, rightCell.Color);
 		}
+
+		_features.AddWall (bottom, bottomCell, left, leftCell, right, rightCell);
 	}
 
 	void TriangulateEdgeTerraces (

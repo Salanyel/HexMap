@@ -32,6 +32,7 @@ public class HexMapEditor : MonoBehaviour {
 
 	int _brushSize = 0;
 	ENUM_OptionalToggle _riverMode;
+	ENUM_OptionalToggle _walledMode;
 
 	bool _isDrag;
 	ENUM_HexDirection _dragDirection;
@@ -101,6 +102,10 @@ public class HexMapEditor : MonoBehaviour {
 
 			if (_canApplyPlantLevel) {
 				p_cell.PlantLevel = _activePlantLevel;
+			}
+
+			if (_walledMode != ENUM_OptionalToggle.Ignore) {
+				p_cell.Walled = _walledMode == ENUM_OptionalToggle.Yes;
 			}
 
 			if (_riverMode == ENUM_OptionalToggle.No) {
@@ -199,6 +204,10 @@ public class HexMapEditor : MonoBehaviour {
 
 	public void SetRiverMode(int p_mode) {
 		_riverMode = (ENUM_OptionalToggle) p_mode;
+	}
+
+	public void SetWalledMode(int p_mode) {
+		_walledMode = (ENUM_OptionalToggle) p_mode;
 	}
 
 	#endregion
