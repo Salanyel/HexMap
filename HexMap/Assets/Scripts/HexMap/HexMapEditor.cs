@@ -32,6 +32,7 @@ public class HexMapEditor : MonoBehaviour {
 
 	int _brushSize = 0;
 	ENUM_OptionalToggle _riverMode;
+	ENUM_OptionalToggle _roadMode;
 	ENUM_OptionalToggle _walledMode;
 
 	bool _isDrag;
@@ -116,6 +117,16 @@ public class HexMapEditor : MonoBehaviour {
 					_previousCell.SetOutgoingRiver (_dragDirection);
 				}
 			}
+
+			if (_roadMode == ENUM_OptionalToggle.No) {
+				p_cell.RemoveRoads ();
+			} else if (_isDrag && _roadMode == ENUM_OptionalToggle.Yes) {
+				HexCell otherCell = p_cell.GetNeighbor (_dragDirection.Opposite ());
+				if (otherCell) {
+					otherCell.AddRoad(_dragDirection);
+				}
+			}
+
 		}
 	}
 
@@ -204,6 +215,10 @@ public class HexMapEditor : MonoBehaviour {
 
 	public void SetRiverMode(int p_mode) {
 		_riverMode = (ENUM_OptionalToggle) p_mode;
+	}
+
+	public void SetRoadMode(int p_mode) {
+		_roadMode = (ENUM_OptionalToggle) p_mode;
 	}
 
 	public void SetWalledMode(int p_mode) {
