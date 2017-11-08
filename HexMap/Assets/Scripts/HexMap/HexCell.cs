@@ -199,6 +199,10 @@ public class HexCell : MonoBehaviour {
 		return false;
 	}
 
+	public ENUM_HexDirection RiverBeginOrEndDirection() {
+		return _hasIncomingRiver ? _incomingRiver : _outgoingRiver;
+	}
+
 	public bool HasRoadThroughEdge(ENUM_HexDirection p_direction) {
 		return _roads [(int)p_direction];
 	}
