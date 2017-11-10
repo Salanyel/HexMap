@@ -92,7 +92,7 @@ public class HexFeatureManager : MonoBehaviour {
 		instance.SetParent(_container, false);
 	}
 
-	public void AddWall(EdgeVertices p_near, HexCell p_nearCell, EdgeVertices p_far, HexCell p_farCell, bool p_hasRiver) {
+	public void AddWall(EdgeVertices p_near, HexCell p_nearCell, EdgeVertices p_far, HexCell p_farCell, bool p_hasRiver, bool p_hasRoad) {
 		if (p_nearCell.Walled != p_farCell.Walled 
 				&& !p_nearCell.IsUnderWater 
 				&& !p_farCell.IsUnderWater 
@@ -100,7 +100,7 @@ public class HexFeatureManager : MonoBehaviour {
 
 			AddWallSegment (p_near.v1, p_far.v1, p_near.v2, p_far.v2);
 
-			if (p_hasRiver) {
+			if (p_hasRiver || p_hasRoad) {
 				//Close the twoside gap in the opening
 				AddWallCap(p_near.v2, p_far.v2);
 				AddWallCap(p_far.v4, p_near.v4);
