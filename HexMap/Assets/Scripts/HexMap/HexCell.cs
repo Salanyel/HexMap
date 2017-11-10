@@ -24,6 +24,9 @@ public class HexCell : MonoBehaviour {
 	[SerializeField]
 	HexGridChunk _chunk;
 
+	[SerializeField]
+	bool[] _roads;
+
 	bool _hasIncomingRiver;
 	bool _hasOutgoingRiver;
 	ENUM_HexDirection _incomingRiver;
@@ -67,6 +70,12 @@ public class HexCell : MonoBehaviour {
 			_uiRect.localPosition = uiPosition;
 
 			ValidateRivers ();
+
+			for (int i = 0; i < _roads.Length; ++i) {
+				if (_roads[i] && GetElevationDifference ((ENUM_HexDirection)i) >= 1) {
+					SetRoad (i, false);
+				}
+			}
 
 			Refresh ();
 		}
@@ -180,8 +189,45 @@ public class HexCell : MonoBehaviour {
 
 	#region Methods
 
+	public bool HasRoads() {
+		for (int i = 0; i < _roads.Length; ++i) {
+			if (_roads [i]) {
+				return _roads[i];
+			}
+		}
+
+		return false;
+	}
+
+	public ENUM_HexDirection RiverBeginOrEndDirection() {
+		return _hasIncomingRiver ? _incomingRiver : _outgoingRiver;
+	}
+
+	public bool HasRoadThroughEdge(ENUM_HexDirection p_direction) {
+		return _roads [(int)p_direction];
+	}
+
 	bool IsValidRiverDestination(HexCell p_neighbor) {
 		return p_neighbor && (_elevation >= p_neighbor._elevation || _waterLevel == p_neighbor._elevation);
+	}
+
+	void SetRoad(int p_index, bool p_state) {
+		_roads [p_index] = p_state;
+		_neighbors [p_index]._roads [(int)((ENUM_HexDirection)p_index).Opposite ()] = p_state;
+		_neighbors [p_index].RefreshSelfOnly ();
+		RefreshSelfOnly ();
+	}
+
+	public void AddRoad(ENUM_HexDirection p_direction) {
+		if (!_roads [(int)p_direction] && !HasRiverThroughEdge(p_direction) && GetElevationDifference(p_direction) <= 1) {
+			SetRoad ((int)p_direction, true);
+		}
+	}
+
+	public void RemoveRoads() {
+		for (int i = 0; i < _roads.Length; ++i) {
+			SetRoad (i, false);
+		}
 	}
 
 	public bool HasRiverThroughEdge(ENUM_HexDirection p_direction) {
@@ -197,6 +243,11 @@ public class HexCell : MonoBehaviour {
 	public void SetNeighbor(ENUM_HexDirection p_direction, HexCell p_cell) {
 		_neighbors [(int)p_direction] = p_cell;
 		p_cell._neighbors [(int)p_direction.Opposite ()] = this;
+	}
+
+	public int GetElevationDifference(ENUM_HexDirection p_direction) {
+		int difference = _elevation - _neighbors [(int)p_direction].Elevation;
+		return difference >= 0 ? difference : -difference;
 	}
 
 	public ENUM_HexEdgeType GetEdgeType(ENUM_HexDirection p_direction) {
@@ -265,12 +316,12 @@ public class HexCell : MonoBehaviour {
 
 		_hasOutgoingRiver = true;
 		_outgoingRiver = p_direction;
-		RefreshSelfOnly ();
 
 		neighbor.RemoveIncomingRiver ();
 		neighbor._hasIncomingRiver = true;
 		neighbor._incomingRiver = p_direction.Opposite ();
-		neighbor.RefreshSelfOnly ();
+
+		SetRoad ((int)p_direction, false);
 	}
 
 	void Refresh() {

@@ -1,12 +1,13 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/HexMap/HexFeatureManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/HexMap/HexGridChunk.cs">
     <Files>
+      <File FileName="Assets/Materials/Road.shader" Line="37" Column="20" />
       <File FileName="Assets/Scripts/HexMap/HexCell.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/HexMap/HexFeatureManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Materials/River.shader" Line="1" Column="1" />
       <File FileName="Assets/Materials/Water Shore.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/HexMap/HexGridChunk.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/HexMap/HexGridChunk.cs" Line="158" Column="128" />
       <File FileName="Assets/Materials/Water.shader" Line="1" Column="1" />
       <File FileName="Assets/Scripts/HexMap/HexMesh.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Parameters/HexMetrics.cs" Line="1" Column="1" />
@@ -28,9 +29,10 @@
         <State name="__root__">
           <Node name="HexMap" expanded="True">
             <Node name="Assembly-CSharp" expanded="True">
+              <Node name="Materials" expanded="True" />
               <Node name="Scripts" expanded="True">
                 <Node name="HexMap" expanded="True">
-                  <Node name="HexFeatureManager.cs" selected="True" />
+                  <Node name="HexGridChunk.cs" selected="True" />
                 </Node>
                 <Node name="Parameters" expanded="True" />
               </Node>
