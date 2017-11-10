@@ -381,9 +381,35 @@ public class HexGridChunk : MonoBehaviour {
 			roadCenter += corner * 0.5f;
 			p_center += corner * 0.25f;
 		} else if (p_cell.IncomingRiver == p_cell.OutgoingRiver.Previous ()) {
-			roadCenter -= HexMetrics.GetSecondCorner(p_cell.IncomingRiver) * 0.2f;
+			roadCenter -= HexMetrics.GetSecondCorner (p_cell.IncomingRiver) * 0.2f;
 		} else if (p_cell.IncomingRiver == p_cell.OutgoingRiver.Next ()) {
-			roadCenter -= HexMetrics.GetFirstCorner(p_cell.IncomingRiver) * 0.2f;
+			roadCenter -= HexMetrics.GetFirstCorner (p_cell.IncomingRiver) * 0.2f;
+		} else if (previousHasRiver && nextHasRiver) {
+			if (!hasRoadThroughEdge) {
+				return;
+			}
+
+			Vector3 offset = HexMetrics.GetSolidEdgeMiddle (p_direction) * HexMetrics._innerToOuter;
+			roadCenter += offset * 0.7f;
+			p_center += offset * 0.5f;
+		} else {
+			ENUM_HexDirection middle;
+			if (previousHasRiver) {
+				middle = p_direction.Next ();
+			} else if (nextHasRiver) {
+				middle = p_direction.Previous ();
+			} else {
+				middle = p_direction;
+			}
+
+			if (
+				!p_cell.HasRoadThroughEdge (middle) &&
+				!p_cell.HasRoadThroughEdge (middle.Previous ()) &&
+				!p_cell.HasRoadThroughEdge (middle.Next ())) {
+				return;
+			}
+
+			roadCenter += HexMetrics.GetSolidEdgeMiddle (middle) * 0.25f;
 		}
 
 		Vector3 mL = Vector3.Lerp (roadCenter, p_e.v1, interpolators.x);
