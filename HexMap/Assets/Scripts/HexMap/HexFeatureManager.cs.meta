@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: 7cf44630d17c54529ad863136e0002cf
-timeCreated: 1508827088
+timeCreated: 1510817829
 licenseType: Pro
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _bridge: {instanceID: 0}
+  - _walls: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

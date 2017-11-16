@@ -674,6 +674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf44630d17c54529ad863136e0002cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bridge: {fileID: 4467874563932132, guid: 490dc843acaee4c5d8b8b442569b301b, type: 2}
   _urbanCollections:
   - _prefabs:
     - {fileID: 4433172009866964, guid: 57ee05fbd333a4e9e944e384c3132b62, type: 2}

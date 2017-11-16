@@ -35,6 +35,8 @@ public static class HexMetrics {
 	public const float _wallThickness = 0.75f;
 	public const float _wallElevationOffset = _verticalTerraceStepSize;
 
+	public const float _bridgeDesignLength = 7f;
+
 	public const int _chunkSizeX = 5;
 	public const int _chunkSizeZ = 5;
 
