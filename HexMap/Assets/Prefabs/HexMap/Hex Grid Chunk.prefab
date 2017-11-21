@@ -674,6 +674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf44630d17c54529ad863136e0002cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bridge: {fileID: 4467874563932132, guid: 490dc843acaee4c5d8b8b442569b301b, type: 2}
   _urbanCollections:
   - _prefabs:
     - {fileID: 4433172009866964, guid: 57ee05fbd333a4e9e944e384c3132b62, type: 2}
@@ -704,6 +705,10 @@ MonoBehaviour:
   - _prefabs:
     - {fileID: 4433172009866964, guid: f853657fd00e44d63b3f20e56598d550, type: 2}
     - {fileID: 4433172009866964, guid: 3e1b0d398c51f4df08f04e63f8777a4a, type: 2}
+  _specialFeatures:
+  - {fileID: 4022145716141368, guid: 9a3c257a671e847cb8a224140ec64e75, type: 2}
+  - {fileID: 4560870632020756, guid: 8179b171a55ab42cba1db833004fed56, type: 2}
+  - {fileID: 4375634884816492, guid: cf23ea7c43d88456d9e9036ee19ed13b, type: 2}
   _walls: {fileID: 114998247648313772}
 --- !u!114 &114807501274179238
 MonoBehaviour:
