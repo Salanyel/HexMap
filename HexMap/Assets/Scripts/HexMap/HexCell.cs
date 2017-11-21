@@ -27,10 +27,23 @@ public class HexCell : MonoBehaviour {
 	[SerializeField]
 	bool[] _roads;
 
+	int _specialFeatureIndex;
+
 	bool _hasIncomingRiver;
 	bool _hasOutgoingRiver;
 	ENUM_HexDirection _incomingRiver;
 	ENUM_HexDirection _outgoingRiver;
+
+	public int SpecialIndex {
+		get { return _specialFeatureIndex; }
+		set {
+			if (_specialFeatureIndex != value && !HasRiver) {
+				_specialFeatureIndex = value;
+				RemoveRoads ();
+				RefreshSelfOnly ();
+			}
+		}
+	}
 
 	public Vector3 Position {
 		get { return transform.localPosition; }
@@ -189,6 +202,10 @@ public class HexCell : MonoBehaviour {
 
 	#region Methods
 
+	public bool IsSpecial() {
+		return _specialFeatureIndex > 0;
+	}
+
 	public bool HasRoads() {
 		for (int i = 0; i < _roads.Length; ++i) {
 			if (_roads [i]) {
@@ -219,7 +236,11 @@ public class HexCell : MonoBehaviour {
 	}
 
 	public void AddRoad(ENUM_HexDirection p_direction) {
-		if (!_roads [(int)p_direction] && !HasRiverThroughEdge(p_direction) && GetElevationDifference(p_direction) <= 1) {
+		if (!_roads [(int)p_direction] && !HasRiverThroughEdge(p_direction) &&
+			!IsSpecial() && 
+			!GetNeighbor(p_direction).IsSpecial() && 
+			GetElevationDifference(p_direction) <= 1) {
+
 			SetRoad ((int)p_direction, true);
 		}
 	}
@@ -316,10 +337,12 @@ public class HexCell : MonoBehaviour {
 
 		_hasOutgoingRiver = true;
 		_outgoingRiver = p_direction;
+		_specialFeatureIndex = 0;
 
 		neighbor.RemoveIncomingRiver ();
 		neighbor._hasIncomingRiver = true;
 		neighbor._incomingRiver = p_direction.Opposite ();
+		neighbor._specialFeatureIndex = 0;
 
 		SetRoad ((int)p_direction, false);
 	}

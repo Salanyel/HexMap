@@ -17,6 +17,9 @@ public class HexFeatureManager : MonoBehaviour {
 	HexFeatureCollection[] _plantCollections;
 
 	[SerializeField]
+	Transform[] _specialFeatures;
+
+	[SerializeField]
 	HexMesh _walls;
 
 	Transform _container;
@@ -55,6 +58,11 @@ public class HexFeatureManager : MonoBehaviour {
 	}
 
 	public void AddFeature (HexCell cell, Vector3 position) {
+
+		if (cell.IsSpecial()) {
+			return;
+		}
+
 		HexHash hash = HexMetrics.SampleHashGrid(position);
 		Transform prefab = PickPrefab(
 			_urbanCollections, cell.UrbanLevel, hash._a, hash._d
@@ -93,6 +101,15 @@ public class HexFeatureManager : MonoBehaviour {
 		instance.localPosition = HexMetrics.Perturb(position);
 		instance.localRotation = Quaternion.Euler(0f, 360f * hash._e, 0f);
 		instance.SetParent(_container, false);
+	}
+
+	public void AddSpecialFeature(HexCell p_cell, Vector3 p_position) {
+		Transform instance = Instantiate(_specialFeatures[p_cell.SpecialIndex - 1]);
+		HexHash hash = HexMetrics.SampleHashGrid (p_position);
+
+		instance.localPosition = HexMetrics.Perturb(p_position);
+		instance.localRotation = Quaternion.Euler (0f, 360f * hash._e, 0f);
+		instance.SetParent (_container, false);
 	}
 
 	public void AddWall(EdgeVertices p_near, HexCell p_nearCell, EdgeVertices p_far, HexCell p_farCell, bool p_hasRiver, bool p_hasRoad) {

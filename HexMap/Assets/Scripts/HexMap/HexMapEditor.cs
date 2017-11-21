@@ -22,6 +22,7 @@ public class HexMapEditor : MonoBehaviour {
 	int _activeUrbanLevel;
 	int _activeFarmLevel;
 	int _activePlantLevel;
+	int _activeSpecialFeatureIndex;
 
 	bool _canApplyColor;
 	bool _canApplyElevation = true;
@@ -29,6 +30,7 @@ public class HexMapEditor : MonoBehaviour {
 	bool _canApplyUrbanLevel = false;
 	bool _canApplyFarmLevel = false;
 	bool _canApplyPlantLevel = false;
+	bool _canApplySpecialFeature = false;
 
 	int _brushSize = 0;
 	ENUM_OptionalToggle _riverMode;
@@ -91,6 +93,10 @@ public class HexMapEditor : MonoBehaviour {
 
 			if (_canApplyWaterLevel) {
 				p_cell.WaterLevel = _activeWaterLevel;
+			}
+
+			if (_canApplySpecialFeature) {
+				p_cell.SpecialIndex = _activeSpecialFeatureIndex;
 			}
 
 			if (_canApplyUrbanLevel) {
@@ -185,6 +191,10 @@ public class HexMapEditor : MonoBehaviour {
 		_activePlantLevel = (int)p_plantLevel;
 	}
 
+	public void SetSpecialFeatureIndex(float p_index) {
+		_activeSpecialFeatureIndex = (int) p_index;
+	}
+
 	public void SetCanApplyElevation(bool p_can) {
 		_canApplyElevation = p_can;
 	}
@@ -203,6 +213,10 @@ public class HexMapEditor : MonoBehaviour {
 
 	public void SetCanApplyPlantLevel(bool p_can) {
 		_canApplyPlantLevel = p_can;
+	}
+
+	public void SetCanApplySpecialFeature(bool p_can) {
+		_canApplySpecialFeature = p_can;
 	}
 
 	public void SetBrushSize(float p_size) {
