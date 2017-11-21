@@ -11,12 +11,9 @@ public class HexMapEditor : MonoBehaviour {
 		No
 	}
 
-	[SerializeField] 
-	Color[] _colors;
-
 	HexGrid _hexGrid;
-	Color _activeColor;
 
+    int _activeTerrainTypeIndex;
 	int _activeElevation;
 	int _activeWaterLevel;
 	int _activeUrbanLevel;
@@ -47,8 +44,6 @@ public class HexMapEditor : MonoBehaviour {
 
 	void Awake() {
 		_hexGrid = FindObjectOfType<HexGrid> ();
-
-		SelectColor (0);
 	}
 
 	void Update() {
@@ -83,9 +78,10 @@ public class HexMapEditor : MonoBehaviour {
 
 	public void EditCell(HexCell p_cell) {
 		if (p_cell) {
-			if (_canApplyColor) {
-				p_cell.Color = _activeColor;
-			}
+            if (_activeTerrainTypeIndex >= 0)
+            {
+                p_cell.TerrainTypeIndex = _activeTerrainTypeIndex;
+            }
 
 			if (_canApplyElevation) {
 				p_cell.Elevation = _activeElevation;
@@ -164,14 +160,13 @@ public class HexMapEditor : MonoBehaviour {
 		_isDrag = false;
 	}
 
-	public void SelectColor(int p_index) {
-		_canApplyColor = p_index >= 0;
-		if (_canApplyColor) {
-			_activeColor = _colors [p_index];
-		}
-	}
+    public void SetTerrainTypeIndex(int p_index)
+    {
+        _activeTerrainTypeIndex = p_index;
+    }
 
-	public void SetWaterLevel(float p_level) {
+
+    public void SetWaterLevel(float p_level) {
 		_activeWaterLevel = (int) p_level;
 	}
 

@@ -10,9 +10,6 @@ public class HexCell : MonoBehaviour {
 	HexCoordinates _coordinates;
 
 	[SerializeField]
-	Color _color;
-
-	[SerializeField]
 	int _elevation = int.MinValue;
 
 	[SerializeField]
@@ -26,6 +23,8 @@ public class HexCell : MonoBehaviour {
 
 	[SerializeField]
 	bool[] _roads;
+
+    int _terrainTypeIndex;
 
 	int _specialFeatureIndex;
 
@@ -54,15 +53,21 @@ public class HexCell : MonoBehaviour {
 		set { _coordinates = value; }
 	}
 
+    public int TerrainTypeIndex
+    {
+        get { return _terrainTypeIndex; }
+        set
+        {
+            if (_terrainTypeIndex != value)
+            {
+                _terrainTypeIndex = value;
+                Refresh();
+            }
+        }
+    }
+
 	public Color Color {
-		get { return _color; }
-		set { 
-			if (_color == value) {
-				return;
-			}
-			_color = value;
-			Refresh ();
-		}
+		get { return HexMetrics._colors[_terrainTypeIndex]; }
 	}
 
 	public int Elevation {

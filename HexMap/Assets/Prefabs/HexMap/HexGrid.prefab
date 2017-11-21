@@ -156,16 +156,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9df28d254596741e289a29d5fb4dd373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _colors:
+  - {r: 0.81501025, g: 1, b: 0.16176468, a: 1}
+  - {r: 0, g: 0.8161765, b: 0.20826559, a: 1}
+  - {r: 0.25410882, g: 0.08785681, b: 0.9191176, a: 1}
+  - {r: 0.9558824, g: 0.1516227, b: 0.09839964, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
   _chunkCountX: 4
   _chunkCountZ: 3
   _cellPrefab: {fileID: 114989802429633988, guid: 752a8af45b3104cc1bc52c9db94abd05,
     type: 2}
   _cellLabelPrefab: {fileID: 114168443992409972, guid: 5a9055ef4287a40b39d5216701e41491,
     type: 2}
-  _defaultColor: {r: 1, g: 1, b: 1, a: 1}
   _chunkPrefab: {fileID: 114166000178591800, guid: 2e51e443680204278ae532f7305b11f1,
     type: 2}
   _noiseSource: {fileID: 2800000, guid: ffcb4a10e0f3b44deb735f4a40b83e22, type: 3}
+  p_seed: 1234
 --- !u!114 &114260183117589820
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -198,6 +204,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c547250cafb924e6397c4c850c04fe5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isUsingCollider: 0
+  _isUsingColors: 0
+  _isUsingUVCoordinates: 0
+  _isUsingUV2Coordinates: 0
 --- !u!223 &223350791052964200
 Canvas:
   m_ObjectHideFlags: 1

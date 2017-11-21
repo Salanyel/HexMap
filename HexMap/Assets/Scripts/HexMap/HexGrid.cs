@@ -3,9 +3,12 @@ using UnityEngine.UI;
 
 public class HexGrid : MonoBehaviour {
 
-	#region Variables
+    #region Variables
 
-	[SerializeField]
+    [SerializeField]
+    Color[] _colors;
+
+    [SerializeField]
 	int _chunkCountX = 4;
 
 	[SerializeField]
@@ -18,16 +21,13 @@ public class HexGrid : MonoBehaviour {
 	Text _cellLabelPrefab;
 
 	[SerializeField]
-	Color _defaultColor = Color.white;
-
-	[SerializeField]
 	HexGridChunk _chunkPrefab;
 
 	[SerializeField]
 	Texture2D _noiseSource;
 
 	[SerializeField]
-	int p_seed;
+	int p_seed;    
 
 	int _cellCountX;
 	int _cellCountZ;
@@ -58,6 +58,7 @@ public class HexGrid : MonoBehaviour {
 	void Awake() {
 		HexMetrics._noiseSource = _noiseSource;
 		HexMetrics.InitializeHasGrid(p_seed);
+        HexMetrics._colors = _colors;
 
 		_cellCountX = _chunkCountX * HexMetrics._chunkSizeX;
 		_cellCountZ = _chunkCountZ * HexMetrics._chunkSizeZ;
@@ -70,7 +71,8 @@ public class HexGrid : MonoBehaviour {
 		if (!HexMetrics._noiseSource) {
 			HexMetrics._noiseSource = _noiseSource;
 			HexMetrics.InitializeHasGrid (p_seed);
-		}
+            HexMetrics._colors = _colors;
+        }
 	}
 
 	#endregion
@@ -127,7 +129,6 @@ public class HexGrid : MonoBehaviour {
 		HexCell cell = _cells[p_i] = Instantiate<HexCell> (_cellPrefab);
 		cell.transform.localPosition = position;
 		cell.Coordinates = HexCoordinates.FromOffsetCoordinates (p_x, p_z);
-		cell.Color = _defaultColor;
 
 		//Save neighbors
 		if (p_x > 0) {
