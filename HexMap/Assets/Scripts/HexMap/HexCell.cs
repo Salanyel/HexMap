@@ -375,26 +375,70 @@ public class HexCell : MonoBehaviour {
 	}
 
 	public void Save(BinaryWriter p_writer) {
-		p_writer.Write (_terrainTypeIndex);
-		p_writer.Write (_elevation);
-		p_writer.Write (_waterLevel);
-		p_writer.Write (_urbanLevel);
-		p_writer.Write (_farmLevel);
-		p_writer.Write (_plantLevel);
-		p_writer.Write (_specialFeatureIndex);
+		p_writer.Write ((byte) _terrainTypeIndex);
+		p_writer.Write ((byte) _elevation);
+		p_writer.Write ((byte) _waterLevel);
+		p_writer.Write ((byte) _urbanLevel);
+		p_writer.Write ((byte) _farmLevel);
+		p_writer.Write ((byte) _plantLevel);
+		p_writer.Write ((byte) _specialFeatureIndex);
+		p_writer.Write (_isWalled);
+
+		if (_hasIncomingRiver) {
+			p_writer.Write ((byte)(_incomingRiver + 128));
+		} else {
+			p_writer.Write ((byte)0);
+		}
+			
+		if (_hasOutgoingRiver) {
+			p_writer.Write ((byte)(_outgoingRiver + 128));
+		} else {
+			p_writer.Write ((byte)0);
+		}
+
+		int roadFlags = 0;
+		for (int i = 0; i < _roads.Length; ++i) {
+			if (_roads [i]) {
+				roadFlags |= 1 << i;
+			}
+		}
+		p_writer.Write((byte) roadFlags);
 	}
 
 	public void Load(BinaryReader p_reader) {
-		_terrainTypeIndex = p_reader.ReadInt32 ();
-		_elevation = p_reader.ReadInt32 ();
-		_waterLevel = p_reader.ReadInt32 ();
-		_urbanLevel = p_reader.ReadInt32 ();
-		_farmLevel = p_reader.ReadInt32 ();
-		_plantLevel = p_reader.ReadInt32 ();
-		_specialFeatureIndex = p_reader.ReadInt32 ();
+		_terrainTypeIndex = p_reader.ReadByte ();
+		_elevation = p_reader.ReadByte ();
+		RefreshPosition ();
+
+		_waterLevel = p_reader.ReadByte ();
+		_urbanLevel = p_reader.ReadByte ();
+		_farmLevel = p_reader.ReadByte ();
+		_plantLevel = p_reader.ReadByte ();
+		_specialFeatureIndex = p_reader.ReadByte ();
+		_isWalled = p_reader.ReadBoolean ();
+
+		byte riverData = p_reader.ReadByte ();
+		if (riverData > 128) {
+			_hasIncomingRiver = true;
+			_incomingRiver = (ENUM_HexDirection)(riverData - 128);
+		} else {
+			_hasIncomingRiver = false;
+		}
+
+		riverData = p_reader.ReadByte ();
+		if (riverData > 128) {
+			_hasOutgoingRiver = true;
+			_outgoingRiver = (ENUM_HexDirection)(riverData - 128);
+		} else {
+			_hasOutgoingRiver = false;
+		}
+
+		int roadFlags = p_reader.ReadByte ();
+		for (int i = 0; i < _roads.Length; ++i) {
+			_roads [i] = (roadFlags & (1 << i)) != 0;
+		}
 
 		Refresh ();
-		RefreshPosition ();
 	}
 
 	#endregion

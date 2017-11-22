@@ -241,6 +241,7 @@ public class HexMapEditor : MonoBehaviour {
 
 		using (BinaryWriter writer = new BinaryWriter(File.Open (path, FileMode.Create))) {
 
+			writer.Write (0);
 			_hexGrid.Save (writer);
 		}
 	}
@@ -250,8 +251,13 @@ public class HexMapEditor : MonoBehaviour {
 
 		using (BinaryReader reader = new BinaryReader(File.OpenRead(path))) {
 
-			_hexGrid.Load (reader);
+			int header = reader.ReadInt32 ();
+			if (header == 0) {
+				_hexGrid.Load (reader);
+			} else {
+				Debug.LogWarning ("Unknow map format " + header);
 			}
+		}
 	}
 
 	#endregion
