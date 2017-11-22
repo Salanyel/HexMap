@@ -239,20 +239,18 @@ public class HexMapEditor : MonoBehaviour {
 		string path = Path.Combine (Application.persistentDataPath, "test.map");
 		Debug.Log ("--- Save path: " + path);
 
-		using 
-			(BinaryWriter writer = new BinaryWriter(File.Open (path, FileMode.Create))) {
+		using (BinaryWriter writer = new BinaryWriter(File.Open (path, FileMode.Create))) {
 
-			writer.Write (123);
+			_hexGrid.Save (writer);
 		}
 	}
 
 	public void Load() {
 		string path = Path.Combine (Application.persistentDataPath, "test.map");
 
-		using 
-			(BinaryReader reader = new BinaryReader(File.OpenRead(path))) {
+		using (BinaryReader reader = new BinaryReader(File.OpenRead(path))) {
 
-				Debug.Log(reader.ReadInt32());
+			_hexGrid.Load (reader);
 			}
 	}
 

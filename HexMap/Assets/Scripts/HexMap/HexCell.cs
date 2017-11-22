@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class HexCell : MonoBehaviour {
 
@@ -78,24 +79,7 @@ public class HexCell : MonoBehaviour {
 			}
 
 			_elevation = value;
-			Vector3 position = transform.localPosition;
-			position.y = value * HexMetrics._elevationStep;
-			position.y += (HexMetrics.SampleNoise (position).y * 2f - 1f) * HexMetrics._cellPerturbElevation;
-			transform.localPosition = position;
-
-			Vector3 uiPosition = _uiRect.localPosition;
-			uiPosition.z = -position.y;
-			_uiRect.localPosition = uiPosition;
-
-			ValidateRivers ();
-
-			for (int i = 0; i < _roads.Length; ++i) {
-				if (_roads[i] && GetElevationDifference ((ENUM_HexDirection)i) >= 1) {
-					SetRoad (i, false);
-				}
-			}
-
-			Refresh ();
+			RefreshPosition ();
 		}
 	}
 
@@ -219,6 +203,27 @@ public class HexCell : MonoBehaviour {
 		}
 
 		return false;
+	}
+
+	void RefreshPosition() {
+		Vector3 position = transform.localPosition;
+		position.y = _elevation * HexMetrics._elevationStep;
+		position.y += (HexMetrics.SampleNoise (position).y * 2f - 1f) * HexMetrics._cellPerturbElevation;
+		transform.localPosition = position;
+
+		Vector3 uiPosition = _uiRect.localPosition;
+		uiPosition.z = -position.y;
+		_uiRect.localPosition = uiPosition;
+
+		ValidateRivers ();
+
+		for (int i = 0; i < _roads.Length; ++i) {
+			if (_roads[i] && GetElevationDifference ((ENUM_HexDirection)i) >= 1) {
+				SetRoad (i, false);
+			}
+		}
+
+		Refresh ();
 	}
 
 	public ENUM_HexDirection RiverBeginOrEndDirection() {
@@ -367,6 +372,29 @@ public class HexCell : MonoBehaviour {
 
 	void RefreshSelfOnly() {
 		_chunk.Refresh ();
+	}
+
+	public void Save(BinaryWriter p_writer) {
+		p_writer.Write (_terrainTypeIndex);
+		p_writer.Write (_elevation);
+		p_writer.Write (_waterLevel);
+		p_writer.Write (_urbanLevel);
+		p_writer.Write (_farmLevel);
+		p_writer.Write (_plantLevel);
+		p_writer.Write (_specialFeatureIndex);
+	}
+
+	public void Load(BinaryReader p_reader) {
+		_terrainTypeIndex = p_reader.ReadInt32 ();
+		_elevation = p_reader.ReadInt32 ();
+		_waterLevel = p_reader.ReadInt32 ();
+		_urbanLevel = p_reader.ReadInt32 ();
+		_farmLevel = p_reader.ReadInt32 ();
+		_plantLevel = p_reader.ReadInt32 ();
+		_specialFeatureIndex = p_reader.ReadInt32 ();
+
+		Refresh ();
+		RefreshPosition ();
 	}
 
 	#endregion
