@@ -67,10 +67,6 @@ public class HexCell : MonoBehaviour {
         }
     }
 
-	public Color Color {
-		get { return HexMetrics._colors[_terrainTypeIndex]; }
-	}
-
 	public int Elevation {
 		get { return _elevation; }
 		set { 
