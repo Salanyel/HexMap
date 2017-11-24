@@ -1,13 +1,14 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/HexMap/HexGridChunk.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/HexMap/HexMapEditor.cs">
     <Files>
-      <File FileName="Assets/Materials/Road.shader" Line="37" Column="20" />
-      <File FileName="Assets/Scripts/HexMap/HexCell.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/HexMap/HexMapEditor.cs" Line="258" Column="54" />
+      <File FileName="Assets/Materials/Road.shader" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/HexMap/HexCell.cs" Line="438" Column="45" />
       <File FileName="Assets/Scripts/HexMap/HexFeatureManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Materials/River.shader" Line="1" Column="1" />
       <File FileName="Assets/Materials/Water Shore.shader" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/HexMap/HexGridChunk.cs" Line="158" Column="128" />
+      <File FileName="Assets/Scripts/HexMap/HexGridChunk.cs" Line="1" Column="1" />
       <File FileName="Assets/Materials/Water.shader" Line="1" Column="1" />
       <File FileName="Assets/Scripts/HexMap/HexMesh.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Parameters/HexMetrics.cs" Line="1" Column="1" />
@@ -15,8 +16,7 @@
       <File FileName="Assets/Scripts/Input/HexMapCamera.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/HexMap/HexCoordinates.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Editor/HexCoordinatesDrawer.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/HexMap/HexMapEditor.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/HexMap/HexGrid.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/HexMap/HexGrid.cs" Line="184" Column="17" />
       <File FileName="Assets/Scripts/HexMap/EdgeVertices.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Architectures/ListPool.cs" Line="1" Column="1" />
       <File FileName="Assets/Materials/Water.cginc" Line="1" Column="1" />
@@ -32,7 +32,7 @@
               <Node name="Materials" expanded="True" />
               <Node name="Scripts" expanded="True">
                 <Node name="HexMap" expanded="True">
-                  <Node name="HexGridChunk.cs" selected="True" />
+                  <Node name="HexMapEditor.cs" selected="True" />
                 </Node>
                 <Node name="Parameters" expanded="True" />
               </Node>

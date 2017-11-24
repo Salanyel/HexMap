@@ -12,8 +12,6 @@ public static class HexMetrics {
 
     #region Variables
 
-    public static Color[] _colors;
-
 	public const float _outerRadius = 10f;
 	public const float _innerRadius = _outerRadius * _outerToInner;
 

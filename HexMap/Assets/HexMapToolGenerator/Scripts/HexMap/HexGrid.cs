@@ -7,9 +7,6 @@ public class HexGrid : MonoBehaviour {
     #region Variables
 
     [SerializeField]
-    Color[] _colors;
-
-    [SerializeField]
 	int _chunkCountX = 4;
 
 	[SerializeField]
@@ -59,7 +56,6 @@ public class HexGrid : MonoBehaviour {
 	void Awake() {
 		HexMetrics._noiseSource = _noiseSource;
 		HexMetrics.InitializeHasGrid(p_seed);
-        HexMetrics._colors = _colors;
 
 		_cellCountX = _chunkCountX * HexMetrics._chunkSizeX;
 		_cellCountZ = _chunkCountZ * HexMetrics._chunkSizeZ;
@@ -72,7 +68,6 @@ public class HexGrid : MonoBehaviour {
 		if (!HexMetrics._noiseSource) {
 			HexMetrics._noiseSource = _noiseSource;
 			HexMetrics.InitializeHasGrid (p_seed);
-            HexMetrics._colors = _colors;
         }
 	}
 

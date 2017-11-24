@@ -18,11 +18,16 @@ public class HexMesh : MonoBehaviour {
 	[SerializeField]
 	bool _isUsingUV2Coordinates;
 
+	[SerializeField]
+	bool _isUsingTerrainTypes;
+
 	List<Vector3> vertices;
+	List<Vector3> _terrainTypes;
 	List<Color> colors;
 	List<Vector2> uvs;
 	List<Vector2> uvs2;
 	List<int> triangles;
+
 
 	Mesh hexMesh;
 	MeshCollider meshCollider;
@@ -66,6 +71,10 @@ public class HexMesh : MonoBehaviour {
 			uvs2 = ListPool<Vector2>.Get ();
 		}
 
+		if (_isUsingTerrainTypes) {
+			_terrainTypes = ListPool<Vector3>.Get();
+		}
+
 		triangles = ListPool<int>.Get ();
 	}
 
@@ -88,6 +97,11 @@ public class HexMesh : MonoBehaviour {
 			ListPool<Vector2>.Add (uvs2);
 		}
 
+		if (_isUsingTerrainTypes) {
+			hexMesh.SetUVs(2, _terrainTypes);
+			ListPool<Vector3>.Add(_terrainTypes);
+		}
+
 		hexMesh.SetTriangles (triangles, 0);
 		ListPool<int>.Add (triangles);
 		hexMesh.RecalculateNormals ();
@@ -105,6 +119,12 @@ public class HexMesh : MonoBehaviour {
 		triangles.Add(vertexIndex);
 		triangles.Add(vertexIndex + 1);
 		triangles.Add(vertexIndex + 2);
+	}
+
+	public void AddTriangleTerrainTypes (Vector3 types) {
+		_terrainTypes.Add(types);
+		_terrainTypes.Add(types);
+		_terrainTypes.Add(types);
 	}
 
 	public void AddTriangleUnperturbed (Vector3 v1, Vector3 v2, Vector3 v3) {
@@ -141,6 +161,13 @@ public class HexMesh : MonoBehaviour {
 		triangles.Add(vertexIndex + 1);
 		triangles.Add(vertexIndex + 2);
 		triangles.Add(vertexIndex + 3);
+	}
+
+	public void AddQuadTerrainTypes (Vector3 types) {
+		_terrainTypes.Add(types);
+		_terrainTypes.Add(types);
+		_terrainTypes.Add(types);
+		_terrainTypes.Add(types);
 	}
 
 	public void AddQuadUnperturbed(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4) {
