@@ -23,6 +23,7 @@ public class HexMapEditor : MonoBehaviour {
 	int _activeSpecialFeatureIndex;
 
 	bool _canApplyColor;
+	bool _isRendered = true;
 	bool _canApplyElevation = true;
 	bool _canApplyWaterLevel = true;
 	bool _canApplyUrbanLevel = false;
@@ -79,6 +80,9 @@ public class HexMapEditor : MonoBehaviour {
 
 	public void EditCell(HexCell p_cell) {
 		if (p_cell) {
+
+			SetRendering (p_cell.transform.parent, _isRendered);
+
             if (_activeTerrainTypeIndex >= 0)
             {
                 p_cell.TerrainTypeIndex = _activeTerrainTypeIndex;
@@ -130,6 +134,17 @@ public class HexMapEditor : MonoBehaviour {
 				}
 			}
 
+		}
+	}
+
+	void SetRendering(Transform p_chunk, bool p_isRendering) {
+		Debug.Log ("--- Chunk: " + p_chunk.gameObject.name, p_chunk.gameObject);
+		foreach (HexMesh mesh in p_chunk.GetComponentsInChildren<HexMesh>()) {
+			if (mesh.gameObject.name == "Terrain") {
+				Debug.Log ("--- Object found: " + mesh.gameObject.name, mesh.gameObject);
+				Debug.Log ("--- Rendering: " + p_isRendering);
+				mesh.GetComponent<MeshRenderer> ().enabled = p_isRendering;
+			}
 		}
 	}
 
@@ -221,6 +236,10 @@ public class HexMapEditor : MonoBehaviour {
 
 	public void ShowUI(bool p_isVisible) {
 		_hexGrid.ShowUI (p_isVisible);
+	}
+
+	public void SetIsRendered(bool p_value) {
+		_isRendered = p_value;
 	}
 
 	public void SetRiverMode(int p_mode) {
