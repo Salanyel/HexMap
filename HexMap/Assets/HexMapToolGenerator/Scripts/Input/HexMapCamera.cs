@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace HexMapGenerator {
+
 public class HexMapCamera : MonoBehaviour {
 
 	#region Variables
@@ -125,4 +127,6 @@ public class HexMapCamera : MonoBehaviour {
 	}
 
 	#endregion
+}
+
 }

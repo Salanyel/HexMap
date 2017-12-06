@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+namespace HexMapGenerator {
+
 public class HexGridChunk : MonoBehaviour {
 
 	#region Variables
@@ -996,4 +998,5 @@ public class HexGridChunk : MonoBehaviour {
 	}
 
 	#endregion
+}
 }

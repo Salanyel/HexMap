@@ -1,6 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
+namespace HexMapGenerator {
+
 [CustomPropertyDrawer (typeof(HexCoordinates))]
 public class HexCoordinatesDrawer : PropertyDrawer {
 
@@ -20,4 +22,5 @@ public class HexCoordinatesDrawer : PropertyDrawer {
 
 	#endregion
 
+}
 }

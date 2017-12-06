@@ -1,6 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
+namespace HexMapGenerator {
+
 public class TextureArrayWizard : ScriptableWizard {
 
 	#region Variables
@@ -54,4 +56,5 @@ public class TextureArrayWizard : ScriptableWizard {
 
 
 	#endregion
+}
 }

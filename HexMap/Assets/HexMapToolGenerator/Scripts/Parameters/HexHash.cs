@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+namespace HexMapGenerator {
+
 public struct HexHash {
 
 	#region Variables
@@ -22,4 +24,6 @@ public struct HexHash {
 	}
 
 	#endregion
+}
+
 }

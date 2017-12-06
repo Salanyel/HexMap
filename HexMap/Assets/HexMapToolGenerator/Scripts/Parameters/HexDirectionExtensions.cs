@@ -1,4 +1,6 @@
-﻿public enum ENUM_HexDirection {
+﻿namespace HexMapGenerator {
+
+public enum ENUM_HexDirection {
 	NE = 0, 
 	E, SE, SW, W, NW
 }
@@ -25,4 +27,5 @@ public static class ENUM_HexDirectionExtensions {
 		p_direction += 2;
 		return p_direction <= ENUM_HexDirection.NW ? p_direction : (p_direction - 6);
 	}
+}
 }

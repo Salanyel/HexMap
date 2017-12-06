@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+namespace HexMapGenerator {
+
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class HexMesh : MonoBehaviour {
 
@@ -247,4 +249,5 @@ public class HexMesh : MonoBehaviour {
 
 	#endregion
 
+}
 }

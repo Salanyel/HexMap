@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
+namespace HexMapGenerator {
+
 public static class ListPool<T> {
 
 	#region Variables
@@ -25,4 +27,5 @@ public static class ListPool<T> {
 	}
 
 	#endregion
+}
 }

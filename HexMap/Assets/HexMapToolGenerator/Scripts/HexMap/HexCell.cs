@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
+namespace HexMapGenerator {
+
 public class HexCell : MonoBehaviour {
 
 	#region Variables
@@ -438,4 +440,6 @@ public class HexCell : MonoBehaviour {
 	}
 
 	#endregion
+}
+
 }

@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using System.IO;
 
+namespace HexMapGenerator {
+
 public class HexGrid : MonoBehaviour {
 
     #region Variables
@@ -187,4 +189,5 @@ public class HexGrid : MonoBehaviour {
 	}
 
 	#endregion
+}
 }

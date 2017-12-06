@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+namespace HexMapGenerator {
+
 public class HexFeatureManager : MonoBehaviour {
 
 	#region Variables
@@ -267,4 +269,5 @@ public class HexFeatureManager : MonoBehaviour {
 	}
 
 	#endregion
+}
 }

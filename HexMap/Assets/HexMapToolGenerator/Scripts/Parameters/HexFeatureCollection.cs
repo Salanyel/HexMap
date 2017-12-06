@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+namespace HexMapGenerator {
+
 [System.Serializable]
 public struct HexFeatureCollection {
 	public Transform[] _prefabs;
@@ -7,4 +9,6 @@ public struct HexFeatureCollection {
 	public Transform Pick(float p_choice) {
 		return _prefabs [(int)(p_choice * _prefabs.Length)];
 	}
+}
+
 }

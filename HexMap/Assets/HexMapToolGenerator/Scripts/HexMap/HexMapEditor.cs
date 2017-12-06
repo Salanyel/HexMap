@@ -2,6 +2,8 @@
 using UnityEngine;
 using System.IO;
 
+namespace HexMapGenerator {
+
 public class HexMapEditor : MonoBehaviour {
 
 	#region Variables 
@@ -280,4 +282,6 @@ public class HexMapEditor : MonoBehaviour {
 	}
 
 	#endregion
+}
+
 }

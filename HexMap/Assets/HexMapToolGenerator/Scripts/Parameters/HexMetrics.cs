@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace HexMapGenerator {
+
 public enum ENUM_HexEdgeType {
 	Flat, 
 	Slope, 
@@ -196,4 +198,5 @@ public static class HexMetrics {
 	}
 
 	#endregion
+}
 }
