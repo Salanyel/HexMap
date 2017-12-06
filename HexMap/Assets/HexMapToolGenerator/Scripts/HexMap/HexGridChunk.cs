@@ -8,7 +8,7 @@ public class HexGridChunk : MonoBehaviour {
 	#region Variables
 
 	[SerializeField]
-		HexMesh _terrain;
+	HexMesh _terrain;
 
 	[SerializeField]
 	HexMesh _rivers;
@@ -27,7 +27,7 @@ public class HexGridChunk : MonoBehaviour {
 
 	[SerializeField]
 	HexFeatureManager _features;
-
+	
 	HexCell[] _cells;
 	Canvas _gridCanvas;
 
@@ -78,8 +78,31 @@ public class HexGridChunk : MonoBehaviour {
 		p_cell.UIRect.SetParent (_gridCanvas.transform, false);
 	}
 
+	public void SetRendering(HexCell p_origin, bool p_isRendered) {
+			int security = 0;
+			for (int i = 0; i < _cells.Length; ++i) {
+				if (_cells [i] != p_origin && _cells [i].GetIsRendered() != p_isRendered) {
+					_cells [i].SetIsRendered (p_isRendered, false);
+				}
+			}
+	}
+
 	public void Refresh() {
 		enabled = true;
+
+			for (int i = 0; i < _cells.Length; ++i) {
+				if (!_cells [i].GetIsRendered()) {
+					SetRendering (false);
+					return;
+				}
+			}
+
+			SetRendering (true);
+	}
+
+	void SetRendering(bool p_isRendering) {
+		_terrain.gameObject.GetComponent<MeshRenderer> ().enabled = p_isRendering;
+
 	}
 
 	public void ShowUI(bool p_isVisible) {

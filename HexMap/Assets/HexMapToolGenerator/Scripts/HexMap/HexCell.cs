@@ -26,7 +26,10 @@ public class HexCell : MonoBehaviour {
 
 	[SerializeField]
 	bool[] _roads;
-
+	
+	[SerializeField]
+	bool _isRendered = true;
+	
     int _terrainTypeIndex;
 
 	int _specialFeatureIndex;
@@ -187,7 +190,33 @@ public class HexCell : MonoBehaviour {
 
 	#endregion
 
+	#region Unity
+
+	void Awake() {
+		_isRendered = true;
+	}
+
+	#endregion
+
 	#region Methods
+
+	void SetRenderingForChunk() {
+			GetComponentInParent<HexGridChunk> ().SetRendering (this, _isRendered);
+
+	}
+	
+	public bool GetIsRendered() {
+		return _isRendered;
+	}
+
+	public void SetIsRendered(bool p_value, bool p_isRecursive) {
+		_isRendered = p_value;
+
+		if (p_isRecursive) {
+			SetRenderingForChunk ();
+			Refresh ();
+		}
+	}
 
 	public bool IsSpecial() {
 		return _specialFeatureIndex > 0;
@@ -381,6 +410,7 @@ public class HexCell : MonoBehaviour {
 		p_writer.Write ((byte) _plantLevel);
 		p_writer.Write ((byte) _specialFeatureIndex);
 		p_writer.Write (_isWalled);
+		p_writer.Write (_isRendered);
 
 		if (_hasIncomingRiver) {
 			p_writer.Write ((byte)(_incomingRiver + 128));
@@ -414,6 +444,7 @@ public class HexCell : MonoBehaviour {
 		_plantLevel = p_reader.ReadByte ();
 		_specialFeatureIndex = p_reader.ReadByte ();
 		_isWalled = p_reader.ReadBoolean ();
+		_isRendered = p_reader.ReadBoolean ();
 
 		byte riverData = p_reader.ReadByte ();
 		if (riverData > 128) {
