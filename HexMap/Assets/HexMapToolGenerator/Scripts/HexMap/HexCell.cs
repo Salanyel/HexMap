@@ -447,7 +447,7 @@ public class HexCell : MonoBehaviour {
 		_isRendered = p_reader.ReadBoolean ();
 
 		byte riverData = p_reader.ReadByte ();
-		if (riverData > 128) {
+		if (riverData >= 128) {
 			_hasIncomingRiver = true;
 			_incomingRiver = (ENUM_HexDirection)(riverData - 128);
 		} else {
@@ -455,7 +455,7 @@ public class HexCell : MonoBehaviour {
 		}
 
 		riverData = p_reader.ReadByte ();
-		if (riverData > 128) {
+		if (riverData >= 128) {
 			_hasOutgoingRiver = true;
 			_outgoingRiver = (ENUM_HexDirection)(riverData - 128);
 		} else {
