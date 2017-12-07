@@ -1,5 +1,6 @@
 ﻿using UnityEngine.EventSystems;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 
 namespace HexMapGenerator {
@@ -13,6 +14,12 @@ public class HexMapEditor : MonoBehaviour {
 		Yes,
 		No
 	}
+
+	[SerializeField]
+	Text _mapPathText;
+
+	[SerializeField]
+	Text _mapNameText;
 
 	HexGrid _hexGrid;
 
@@ -247,6 +254,12 @@ public class HexMapEditor : MonoBehaviour {
 
 	public void Save() {
 		string path = Path.Combine (Application.persistentDataPath, "test.map");
+		
+		if (_mapNameText != null || _mapPathText != null) {
+				string tmp = _mapPathText.text + "/" + _mapNameText.text + ".map";
+				path = Path.Combine (Application.dataPath, tmp);
+		}
+		
 		Debug.Log ("--- Save path: " + path);
 
 		using (BinaryWriter writer = new BinaryWriter(File.Open (path, FileMode.Create))) {
